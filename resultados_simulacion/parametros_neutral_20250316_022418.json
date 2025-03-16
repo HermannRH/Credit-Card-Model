@@ -1,0 +1,15 @@
+{
+    "num_clientes": 8000,
+    "perc_totaleros": 0.3,
+    "perc_morosidad": 0.03,
+    "linea_credito_prom": 40000,
+    "util_credito_totaleros": 0.6,
+    "util_credito_revolventes_alpha": 1.8,
+    "util_credito_revolventes_beta": 3.6,
+    "pago_minimo_perc": 0.05,
+    "prob_pago_minimo": 0.75,
+    "tasa_interes": 42.0,
+    "comision_venta": 0.025,
+    "costo_emision": 600,
+    "semilla_aleatoria": 42
+}
