@@ -222,9 +222,6 @@ def process_simulation_results(results_df):
     # Calculate monthly statistics by scenario and month
     monthly_stats = []
 
-    # Print head of monthly_df in streamlit
-    st.write(monthly_df.head())
-
     for (scenario, month), group in monthly_df.groupby(['scenario', 'month']):
         stats = {
             'scenario': scenario,
@@ -293,9 +290,9 @@ num_clientes_pes = st.sidebar.number_input("Pessimistic Number of Clients", min_
 
 # Customer behavior
 st.sidebar.markdown('<div class="subsection-header">Customer Behavior</div>', unsafe_allow_html=True)
-perc_totaleros_opt = st.sidebar.slider("Optimistic % of Full Payers", min_value=0.1, max_value=0.9, value=0.6, step=0.05, format="%.2f")
-perc_totaleros_neut = st.sidebar.slider("Neutral % of Full Payers", min_value=0.1, max_value=0.9, value=0.75, step=0.05, format="%.2f")
-perc_totaleros_pes = st.sidebar.slider("Pessimistic % of Full Payers", min_value=0.1, max_value=0.9, value=0.9, step=0.05, format="%.2f")
+perc_totaleros_opt = st.sidebar.slider("Optimistic % of Full Payers", min_value=0.0, max_value=0.9, value=0.6, step=0.05, format="%.2f")
+perc_totaleros_neut = st.sidebar.slider("Neutral % of Full Payers", min_value=0.0, max_value=0.9, value=0.75, step=0.05, format="%.2f")
+perc_totaleros_pes = st.sidebar.slider("Pessimistic % of Full Payers", min_value=0.0, max_value=0.9, value=0.9, step=0.05, format="%.2f")
 
 perc_morosidad_opt = st.sidebar.slider("Optimistic Monthly Delinquency Rate", min_value=0.0, max_value=0.01, value=0.003, step=0.0001, format="%.3f")
 perc_morosidad_neut = st.sidebar.slider("Neutral Monthly Delinquency Rate", min_value=0.0, max_value=0.01, value=0.004, step=0.0001, format="%.3f")
@@ -401,10 +398,6 @@ params = CreditCardParams(
     semilla_aleatoria=0  # This will be overridden by the simulation
 )
 
-# Option to load existing results
-st.sidebar.markdown('<div class="subsection-header">Load Existing Results</div>', unsafe_allow_html=True)
-uploaded_file = st.sidebar.file_uploader("Upload simulation results CSV", type="csv")
-
 # Run simulation button
 st.sidebar.markdown('<div class="subsection-header">Run Simulation</div>', unsafe_allow_html=True)
 save_directory = st.sidebar.text_input("Save Directory", value="resultados_simulacion")
@@ -439,21 +432,6 @@ if st.sidebar.button("Run Simulation", type="primary"):
     
     st.success(f"Simulation completed in {st.session_state.last_simulation_time:.2f} seconds!")
 
-# Process uploaded file if available
-if uploaded_file is not None:
-    with st.spinner("Processing uploaded results..."):
-        # Read the uploaded CSV
-        results_df = pd.read_csv(uploaded_file)
-        
-        # Process results into summary and monthly statistics
-        summary_stats_df, monthly_stats_df = process_simulation_results(results_df)
-        
-        # Store in session state
-        st.session_state.simulation_results_df = results_df
-        st.session_state.summary_stats_df = summary_stats_df
-        st.session_state.monthly_stats_df = monthly_stats_df
-        
-        st.success("Uploaded results processed successfully!")
 
 # Display results if available
 if st.session_state.simulation_results_df is not None:
@@ -498,25 +476,31 @@ if st.session_state.simulation_results_df is not None:
         # Display key metrics in a grid
         col1, col2, col3 = st.columns(3)
         
+        # Calculate cumulative net profit for each scenario
+        cumulative_profits = {}
+        for scenario in monthly_df['scenario'].unique():
+            scenario_data = monthly_df[monthly_df['scenario'] == scenario]
+            cumulative_profits[scenario] = scenario_data['net_profit_mean'].sum()
+        
+        # Find best and worst scenarios
+        best_scenario = max(cumulative_profits.items(), key=lambda x: x[1])
+        worst_scenario = min(cumulative_profits.items(), key=lambda x: x[1])
+        
         with col1:
-            st.markdown('<div class="metric-label">Best Mean Net Profit</div>', unsafe_allow_html=True)
-            best_profit = summary_df['net_profit_mean'].max()
-            best_scenario = summary_df.loc[summary_df['net_profit_mean'].idxmax(), 'scenario']
-            st.markdown(f'<div class="metric-value">{format_currency(best_profit)}</div>', unsafe_allow_html=True)
-            st.markdown(f'Scenario: {best_scenario}', unsafe_allow_html=True)
+            st.markdown('<div class="metric-label">Best Total Net Profit</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-value">{format_currency(best_scenario[1])}</div>', unsafe_allow_html=True)
+            st.markdown(f'Scenario: {best_scenario[0]}', unsafe_allow_html=True)
         
         with col2:
-            st.markdown('<div class="metric-label">Worst Mean Net Profit</div>', unsafe_allow_html=True)
-            worst_profit = summary_df['net_profit_mean'].min()
-            worst_scenario = summary_df.loc[summary_df['net_profit_mean'].idxmin(), 'scenario']
-            st.markdown(f'<div class="metric-value">{format_currency(worst_profit)}</div>', unsafe_allow_html=True)
-            st.markdown(f'Scenario: {worst_scenario}', unsafe_allow_html=True)
+            st.markdown('<div class="metric-label">Worst Total Net Profit</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-value">{format_currency(worst_scenario[1])}</div>', unsafe_allow_html=True)
+            st.markdown(f'Scenario: {worst_scenario[0]}', unsafe_allow_html=True)
         
         with col3:
             st.markdown('<div class="metric-label">Profit Range</div>', unsafe_allow_html=True)
-            profit_range = best_profit - worst_profit
+            profit_range = best_scenario[1] - worst_scenario[1]
             st.markdown(f'<div class="metric-value">{format_currency(profit_range)}</div>', unsafe_allow_html=True)
-            st.markdown(f'Difference: {format_percentage(profit_range/abs(worst_profit)) if worst_profit != 0 else "N/A"}', unsafe_allow_html=True)
+            st.markdown(f'Difference: {format_percentage(profit_range/abs(worst_scenario[1])) if worst_scenario[1] != 0 else "N/A"}', unsafe_allow_html=True)
         
         # Display summary charts
         st.markdown('<div class="subsection-header">Key Metrics by Scenario</div>', unsafe_allow_html=True)
