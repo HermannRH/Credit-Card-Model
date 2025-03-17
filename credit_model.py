@@ -1,14 +1,14 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+from datetime import datetime
+import os
+import multiprocessing as mp
+import time
+import io
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import time
-import os
-import multiprocessing as mp
-from datetime import datetime
 from model_simulation import (
     CreditCardParams,
     simular_escenarios_paralelo,
@@ -22,6 +22,118 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Helper functions for visualization
+def create_box_plot(df: pd.DataFrame, x_col: str, y_col: str, title: str) -> go.Figure:
+    """Create a box plot using Plotly."""
+    fig = px.box(df, x=x_col, y=y_col, title=title)
+    fig.update_layout(
+        title_x=0.5,
+        title_font_size=20,
+        height=500,
+        margin=dict(t=50, b=50)
+    )
+    return fig
+
+def create_line_plot_with_range(df: pd.DataFrame, title: str, y_label: str) -> go.Figure:
+    """Create a line plot with confidence intervals using Plotly."""
+    fig = go.Figure()
+    
+    for scenario in df['scenario'].unique():
+        scenario_data = df[df['scenario'] == scenario].sort_values('month')
+        
+        # Add main line
+        fig.add_trace(go.Scatter(
+            x=scenario_data['month'],
+            y=scenario_data[f'{y_label}_mean'],
+            name=f"{scenario}",
+            mode='lines',
+            line=dict(width=2)
+        ))
+        
+        # Add confidence interval
+        fig.add_trace(go.Scatter(
+            x=scenario_data['month'],
+            y=scenario_data[f'{y_label}_mean'] + 2*scenario_data[f'{y_label}_std'],
+            mode='lines',
+            line=dict(width=0),
+            showlegend=False,
+            name=f"{scenario} Upper"
+        ))
+        fig.add_trace(go.Scatter(
+            x=scenario_data['month'],
+            y=scenario_data[f'{y_label}_mean'] - 2*scenario_data[f'{y_label}_std'],
+            mode='lines',
+            line=dict(width=0),
+            fillcolor='rgba(0,0,0,0.1)',
+            fill='tonexty',
+            showlegend=False,
+            name=f"{scenario} Lower"
+        ))
+    
+    fig.update_layout(
+        title=title,
+        title_x=0.5,
+        title_font_size=20,
+        height=500,
+        hovermode='x unified',
+        margin=dict(t=50, b=50),
+        xaxis_title="Month",
+        yaxis_title=y_label.replace('_', ' ').title()
+    )
+    return fig
+
+def create_stacked_area_plot(df: pd.DataFrame, title: str) -> go.Figure:
+    """Create a stacked area plot using Plotly."""
+    fig = go.Figure()
+    
+    for column in df.columns:
+        fig.add_trace(go.Scatter(
+            x=df.index,
+            y=df[column],
+            name=column,
+            stackgroup='one',
+            mode='lines',
+            line=dict(width=0.5),
+            hovertemplate="%{y:,.2f}"
+        ))
+    
+    fig.update_layout(
+        title=title,
+        title_x=0.5,
+        title_font_size=20,
+        height=500,
+        hovermode='x unified',
+        margin=dict(t=50, b=50),
+        xaxis_title="Month",
+        yaxis_title="Amount"
+    )
+    return fig
+
+def create_distribution_plot(df: pd.DataFrame, value_col: str, title: str) -> go.Figure:
+    """Create a distribution plot using Plotly."""
+    fig = go.Figure()
+    
+    for scenario in df['scenario'].unique():
+        scenario_data = df[df['scenario'] == scenario][value_col]
+        
+        fig.add_trace(go.Violin(
+            y=scenario_data,
+            name=scenario,
+            box_visible=True,
+            meanline_visible=True
+        ))
+    
+    fig.update_layout(
+        title=title,
+        title_x=0.5,
+        title_font_size=20,
+        height=500,
+        margin=dict(t=50, b=50),
+        xaxis_title="Scenario",
+        yaxis_title=value_col.replace('_', ' ').title()
+    )
+    return fig
 
 # Custom CSS for better styling
 st.markdown("""
@@ -71,230 +183,97 @@ def format_currency(value):
 def format_percentage(value):
     return f"{value:.2%}"
 
-def create_monthly_metrics_df(results):
-    """Create a DataFrame with monthly metrics for all scenarios."""
-    all_data = []
+def process_simulation_results(results_df):
+    """
+    Process the raw simulation results into summary and monthly DataFrames
     
-    for scenario, result in results.items():
-        for month_data in result['resultados_mes']:
-            month_dict = {
-                'Scenario': scenario,
-                'Month': month_data['mes_global'],
-                'Year': month_data['anio'],
-                'Month of Year': month_data['mes'],
-                'Commission Income': month_data['ingresos_comisiones'],
-                'Interest Income': month_data['ingresos_intereses'],
-                'Total Income': month_data['ingresos'],
-                'Expenses': month_data['gastos'],
-                'Losses': month_data['perdidas'],
-                'Net Profit': month_data['ingresos'] - month_data['gastos'] - month_data['perdidas'],
-                'Active Clients': month_data['clientes_activos'],
-                'Delinquent Clients': month_data['clientes_morosos']
-            }
-            all_data.append(month_dict)
+    Args:
+        results_df: DataFrame with all simulation results
+        
+    Returns:
+        Tuple of (summary_stats_df, monthly_stats_df)
+    """
+    # Split into summary and monthly results
+    summary_df = results_df[results_df['simulation_type'] == 'summary']
+    monthly_df = results_df[results_df['simulation_type'] == 'monthly']
     
-    return pd.DataFrame(all_data)
+    # Calculate summary statistics by scenario
+    summary_stats = []
+    for scenario, group in summary_df.groupby('scenario'):
+        stats = {
+            'scenario': scenario,
+            'net_profit_mean': group['net_profit'].mean(),
+            'net_profit_std': group['net_profit'].std(),
+            'net_profit_min': group['net_profit'].min(),
+            'net_profit_max': group['net_profit'].max(),
+            'delinquency_rate_mean': group['delinquency_rate'].mean(),
+            'delinquency_rate_std': group['delinquency_rate'].std(),
+            'active_clients_final_mean': group['active_clients_final'].mean(),
+            'active_clients_final_std': group['active_clients_final'].std(),
+            'total_income_mean': group['total_income'].mean(),
+            'total_expenses_mean': group['total_expenses'].mean(),
+            'total_losses_mean': group['total_losses'].mean(),
+            'num_clients_initial': group['num_clients_initial'].iloc[0]
+        }
+        summary_stats.append(stats)
+    
+    summary_stats_df = pd.DataFrame(summary_stats)
+    
+    # Calculate monthly statistics by scenario and month
+    monthly_stats = []
 
-def create_summary_df(results):
-    """Create a summary DataFrame for all scenarios."""
-    summary = []
-    
-    for scenario, result in results.items():
-        summary.append({
-            'Scenario': scenario,
-            'Total Income': result['ingresos_totales'],
-            'Total Expenses': result['gastos_totales'],
-            'Total Losses': result['perdidas_totales'],
-            'Net Profit': result['ganancia_neta'],
-            'Delinquency Rate': result['tasa_morosidad'],
-            'Final Active Clients': result['clientes_activos_final'],
-            'Initial Clients': result['parametros']['num_clientes']
-        })
-    
-    return pd.DataFrame(summary)
+    # Print head of monthly_df in streamlit
+    st.write(monthly_df.head())
 
-def plot_monthly_metric(df, metric, title, y_label):
-    """Create a line chart for a monthly metric across all scenarios."""
-    fig = px.line(
-        df, 
-        x='Month', 
-        y=metric, 
-        color='Scenario',
-        title=title,
-        labels={'Month': 'Month', metric: y_label},
-        markers=True
-    )
-    fig.update_layout(
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=500
-    )
-    return fig
-
-def plot_scenario_comparison(df, metric, title, y_label):
-    """Create a bar chart comparing a metric across scenarios."""
-    fig = px.bar(
-        df, 
-        x='Scenario', 
-        y=metric,
-        title=title,
-        labels={'Scenario': 'Scenario', metric: y_label},
-        color='Scenario'
-    )
-    fig.update_layout(height=500)
-    return fig
-
-def plot_income_composition(df):
-    """Create a stacked bar chart showing income composition by scenario."""
-    # Melt the dataframe to get it in the right format for a stacked bar chart
-    melted_df = pd.melt(
-        df, 
-        id_vars=['Scenario'], 
-        value_vars=['Commission Income', 'Interest Income'],
-        var_name='Income Type', 
-        value_name='Amount'
-    )
+    for (scenario, month), group in monthly_df.groupby(['scenario', 'month']):
+        stats = {
+            'scenario': scenario,
+            'month': month,
+            'year': group['year'].iloc[0],
+            'month_of_year': group['month_of_year'].iloc[0],
+            'commission_income_mean': group['commission_income'].mean(),
+            'commission_income_std': group['commission_income'].std(),
+            'interest_income_mean': group['interest_income'].mean(),
+            'interest_income_std': group['interest_income'].std(),
+            'total_income_mean': group['total_income'].mean(),
+            'total_income_std': group['total_income'].std(),
+            'expenses_mean': group['expenses'].mean(),
+            'expenses_std': group['expenses'].std(),
+            'losses_mean': group['losses'].mean(),
+            'losses_std': group['losses'].std(),
+            'net_profit_mean': group['net_profit'].mean(),
+            'net_profit_std': group['net_profit'].std(),
+            'active_clients_mean': group['active_clients'].mean(),
+            'active_clients_std': group['active_clients'].std(),
+            'delinquent_clients_mean': group['delinquent_clients'].mean(),
+            'delinquent_clients_std': group['delinquent_clients'].std(),
+            'interes_generado_total': group['interes_generado_total'].mean(),
+            'interes_generado_total_std': group['interes_generado_total'].std(),
+            'pagos_interes_total': group['pagos_interes_total'].mean(),
+            'pagos_interes_total_std': group['pagos_interes_total'].std(),
+            'saldo_principal_total': group['saldo_principal_total'].mean(),
+            'saldo_principal_total_std': group['saldo_principal_total'].std(),
+            'saldo_interes_total': group['saldo_interes_total'].mean(),
+            'saldo_interes_total_std': group['saldo_interes_total'].std(),
+            
+        }
+        monthly_stats.append(stats)
     
-    # Group by scenario and income type to get totals
-    grouped_df = melted_df.groupby(['Scenario', 'Income Type'])['Amount'].sum().reset_index()
+    monthly_stats_df = pd.DataFrame(monthly_stats)
     
-    fig = px.bar(
-        grouped_df, 
-        x='Scenario', 
-        y='Amount', 
-        color='Income Type',
-        title='Income Composition by Scenario',
-        labels={'Amount': 'Total Income', 'Scenario': 'Scenario'},
-        barmode='stack'
-    )
-    fig.update_layout(height=500)
-    return fig
-
-def plot_client_distribution(df):
-    """Create a stacked bar chart showing client distribution by scenario."""
-    # Create a dataframe with active and delinquent clients
-    client_df = df[['Scenario', 'Final Active Clients']].copy()
-    client_df['Delinquent Clients'] = df['Initial Clients'] - df['Final Active Clients']
-    
-    # Melt the dataframe
-    melted_df = pd.melt(
-        client_df, 
-        id_vars=['Scenario'], 
-        value_vars=['Final Active Clients', 'Delinquent Clients'],
-        var_name='Client Type', 
-        value_name='Count'
-    )
-    
-    fig = px.bar(
-        melted_df, 
-        x='Scenario', 
-        y='Count', 
-        color='Client Type',
-        title='Client Distribution by Scenario',
-        labels={'Count': 'Number of Clients', 'Scenario': 'Scenario'},
-        barmode='stack'
-    )
-    fig.update_layout(height=500)
-    return fig
-
-def plot_profit_waterfall(scenario_data):
-    """Create a waterfall chart showing profit breakdown for a scenario."""
-    fig = go.Figure(go.Waterfall(
-        name="Profit Breakdown",
-        orientation="v",
-        measure=["relative", "relative", "relative", "total"],
-        x=["Total Income", "Expenses", "Losses", "Net Profit"],
-        textposition="outside",
-        text=[
-            format_currency(scenario_data['ingresos_totales']),
-            format_currency(-scenario_data['gastos_totales']),
-            format_currency(-scenario_data['perdidas_totales']),
-            format_currency(scenario_data['ganancia_neta'])
-        ],
-        y=[
-            scenario_data['ingresos_totales'],
-            -scenario_data['gastos_totales'],
-            -scenario_data['perdidas_totales'],
-            0
-        ],
-        connector={"line": {"color": "rgb(63, 63, 63)"}},
-    ))
-    
-    fig.update_layout(
-        title="Profit Breakdown",
-        showlegend=False,
-        height=500
-    )
-    return fig
-
-def plot_monthly_income_breakdown(scenario_data):
-    """Create a stacked area chart showing monthly income breakdown."""
-    months = [m['mes_global'] for m in scenario_data['resultados_mes']]
-    commission = [m['ingresos_comisiones'] for m in scenario_data['resultados_mes']]
-    interest = [m['ingresos_intereses'] for m in scenario_data['resultados_mes']]
-    
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=months, y=commission,
-        mode='lines',
-        line=dict(width=0.5, color='rgb(30, 136, 229)'),
-        stackgroup='one',
-        name='Commission Income'
-    ))
-    fig.add_trace(go.Scatter(
-        x=months, y=interest,
-        mode='lines',
-        line=dict(width=0.5, color='rgb(255, 193, 7)'),
-        stackgroup='one',
-        name='Interest Income'
-    ))
-    
-    fig.update_layout(
-        title="Monthly Income Breakdown",
-        xaxis_title="Month",
-        yaxis_title="Income",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=500
-    )
-    return fig
-
-def plot_client_evolution(scenario_data):
-    """Create a line chart showing the evolution of active and delinquent clients."""
-    months = [m['mes_global'] for m in scenario_data['resultados_mes']]
-    active = [m['clientes_activos'] for m in scenario_data['resultados_mes']]
-    delinquent = [m['clientes_morosos'] for m in scenario_data['resultados_mes']]
-    
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=months, y=active,
-        mode='lines+markers',
-        name='Active Clients',
-        line=dict(color='rgb(76, 175, 80)')
-    ))
-    fig.add_trace(go.Scatter(
-        x=months, y=delinquent,
-        mode='lines+markers',
-        name='Delinquent Clients',
-        line=dict(color='rgb(244, 67, 54)')
-    ))
-    
-    fig.update_layout(
-        title="Client Evolution Over Time",
-        xaxis_title="Month",
-        yaxis_title="Number of Clients",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=500
-    )
-    return fig
+    return summary_stats_df, monthly_stats_df
 
 # Initialize session state variables
-if 'simulation_results' not in st.session_state:
-    st.session_state.simulation_results = None
-if 'monthly_metrics_df' not in st.session_state:
-    st.session_state.monthly_metrics_df = None
-if 'summary_df' not in st.session_state:
-    st.session_state.summary_df = None
+if 'simulation_results_df' not in st.session_state:
+    st.session_state.simulation_results_df = None
+if 'summary_stats_df' not in st.session_state:
+    st.session_state.summary_stats_df = None
+if 'monthly_stats_df' not in st.session_state:
+    st.session_state.monthly_stats_df = None
 if 'last_simulation_time' not in st.session_state:
     st.session_state.last_simulation_time = None
+if 'csv_path' not in st.session_state:
+    st.session_state.csv_path = None
 
 # Main app header
 st.markdown('<div class="main-header">Credit Card Portfolio Simulator</div>', unsafe_allow_html=True)
@@ -308,8 +287,8 @@ st.sidebar.markdown('<div class="section-header">Simulation Parameters</div>', u
 
 # Portfolio size
 st.sidebar.markdown('<div class="subsection-header">Portfolio Size</div>', unsafe_allow_html=True)
-num_clientes_opt = st.sidebar.number_input("Optimistic Number of Clients", min_value=1, max_value=100000, value=1000, step=1000)
-num_clientes_neut = st.sidebar.number_input("Neutral Number of Clients", min_value=1, max_value=100000, value=500, step=1000)
+num_clientes_opt = st.sidebar.number_input("Optimistic Number of Clients", min_value=1, max_value=100000, value=100, step=1000)
+num_clientes_neut = st.sidebar.number_input("Neutral Number of Clients", min_value=1, max_value=100000, value=100, step=1000)
 num_clientes_pes = st.sidebar.number_input("Pessimistic Number of Clients", min_value=1, max_value=100000, value=100, step=1000)
 
 # Customer behavior
@@ -318,9 +297,9 @@ perc_totaleros_opt = st.sidebar.slider("Optimistic % of Full Payers", min_value=
 perc_totaleros_neut = st.sidebar.slider("Neutral % of Full Payers", min_value=0.1, max_value=0.9, value=0.75, step=0.05, format="%.2f")
 perc_totaleros_pes = st.sidebar.slider("Pessimistic % of Full Payers", min_value=0.1, max_value=0.9, value=0.9, step=0.05, format="%.2f")
 
-perc_morosidad_opt = st.sidebar.slider("Optimistic Monthly Delinquency Rate", min_value=0.0, max_value=0.1, value=0.03, step=0.005, format="%.3f")
-perc_morosidad_neut = st.sidebar.slider("Neutral Monthly Delinquency Rate", min_value=0.0, max_value=0.1, value=0.05, step=0.005, format="%.3f")
-perc_morosidad_pes = st.sidebar.slider("Pessimistic Monthly Delinquency Rate", min_value=0.0, max_value=0.1, value=0.07, step=0.005, format="%.3f")
+perc_morosidad_opt = st.sidebar.slider("Optimistic Monthly Delinquency Rate", min_value=0.0, max_value=0.01, value=0.003, step=0.0001, format="%.3f")
+perc_morosidad_neut = st.sidebar.slider("Neutral Monthly Delinquency Rate", min_value=0.0, max_value=0.01, value=0.004, step=0.0001, format="%.3f")
+perc_morosidad_pes = st.sidebar.slider("Pessimistic Monthly Delinquency Rate", min_value=0.0, max_value=0.01, value=0.005, step=0.0001, format="%.3f")
 
 # Credit line parameters
 st.sidebar.markdown('<div class="subsection-header">Credit Line Parameters</div>', unsafe_allow_html=True)
@@ -386,9 +365,11 @@ costo_emision_pes = st.sidebar.number_input("Pessimistic Cost per Card", min_val
 
 # Simulation parameters
 st.sidebar.markdown('<div class="subsection-header">Simulation Parameters</div>', unsafe_allow_html=True)
-semilla_aleatoria = st.sidebar.number_input("Random Seed", min_value=1, max_value=1000, value=42, step=1)
 num_years = st.sidebar.slider("Number of Years to Simulate", min_value=1, max_value=10, value=3, step=1)
 num_processes = st.sidebar.slider("Number of Processes", min_value=1, max_value=mp.cpu_count(), value=mp.cpu_count(), step=1)
+
+# Add number of seeds parameter
+num_seeds = st.sidebar.number_input("Number of Seeds", min_value=1, max_value=10000, value=100, step=50)
 
 # Create parameter object
 params = CreditCardParams(
@@ -416,50 +397,77 @@ params = CreditCardParams(
     comision_venta=(comision_venta_opt, comision_venta_neut, comision_venta_pes),
     costo_emision=(costo_emision_opt, costo_emision_neut, costo_emision_pes),
     
-    # Simulation parameters
-    semilla_aleatoria=semilla_aleatoria
+    # No random seed parameter needed
+    semilla_aleatoria=0  # This will be overridden by the simulation
 )
+
+# Option to load existing results
+st.sidebar.markdown('<div class="subsection-header">Load Existing Results</div>', unsafe_allow_html=True)
+uploaded_file = st.sidebar.file_uploader("Upload simulation results CSV", type="csv")
 
 # Run simulation button
 st.sidebar.markdown('<div class="subsection-header">Run Simulation</div>', unsafe_allow_html=True)
-save_results = st.sidebar.checkbox("Save Results to Disk", value=True)
 save_directory = st.sidebar.text_input("Save Directory", value="resultados_simulacion")
 
 if st.sidebar.button("Run Simulation", type="primary"):
-    with st.spinner("Running simulation... This may take a few minutes."):
+    with st.spinner(f"Running {num_seeds} simulations per scenario... This may take a few minutes."):
         start_time = time.time()
         
-        # Run simulation
-        results = simular_escenarios_paralelo(params, num_years=num_years, num_procesos=num_processes)
+        # Run simulation with multiple seeds
+        st.text("Step 1/3: Running Monte Carlo simulations...")
+        results = simular_escenarios_paralelo(params, num_years=num_years, num_procesos=num_processes, num_seeds=num_seeds)
         
-        # Save results if requested
-        if save_results:
-            guardar_resultados(results, save_directory)
+        # Save results to a single CSV file
+        st.text("Step 2/3: Saving results to CSV...")
+        csv_path = guardar_resultados(results, save_directory)
+        st.session_state.csv_path = csv_path
         
-        # Store results in session state
-        st.session_state.simulation_results = results
-        st.session_state.monthly_metrics_df = create_monthly_metrics_df(results)
-        st.session_state.summary_df = create_summary_df(results)
+        # Load the saved CSV for analysis
+        st.text("Step 3/3: Processing results for visualization...")
+        results_df = pd.read_csv(csv_path)
+        
+        # Process results into summary and monthly statistics
+        summary_stats_df, monthly_stats_df = process_simulation_results(results_df)
+        
+        # Store in session state
+        st.session_state.simulation_results_df = results_df
+        st.session_state.summary_stats_df = summary_stats_df
+        st.session_state.monthly_stats_df = monthly_stats_df
         
         end_time = time.time()
         st.session_state.last_simulation_time = end_time - start_time
     
     st.success(f"Simulation completed in {st.session_state.last_simulation_time:.2f} seconds!")
 
+# Process uploaded file if available
+if uploaded_file is not None:
+    with st.spinner("Processing uploaded results..."):
+        # Read the uploaded CSV
+        results_df = pd.read_csv(uploaded_file)
+        
+        # Process results into summary and monthly statistics
+        summary_stats_df, monthly_stats_df = process_simulation_results(results_df)
+        
+        # Store in session state
+        st.session_state.simulation_results_df = results_df
+        st.session_state.summary_stats_df = summary_stats_df
+        st.session_state.monthly_stats_df = monthly_stats_df
+        
+        st.success("Uploaded results processed successfully!")
+
 # Display results if available
-if st.session_state.simulation_results:
-    results = st.session_state.simulation_results
-    monthly_df = st.session_state.monthly_metrics_df
-    summary_df = st.session_state.summary_df
+if st.session_state.simulation_results_df is not None:
+    results_df = st.session_state.simulation_results_df
+    summary_df = st.session_state.summary_stats_df
+    monthly_df = st.session_state.monthly_stats_df
     
     # Create tabs for different views
     tabs = st.tabs([
         "Summary", 
         "Scenario Comparison", 
-        "Monthly Analysis", 
-        "Optimistic Scenario", 
-        "Neutral Scenario", 
-        "Pessimistic Scenario",
+        "Monthly Analysis",
+        "Interest Analysis",
+        "Distribution Analysis",
         "Raw Data"
     ])
     
@@ -467,57 +475,123 @@ if st.session_state.simulation_results:
     with tabs[0]:
         st.markdown('<div class="section-header">Simulation Summary</div>', unsafe_allow_html=True)
         
+        # Download button for CSV
+        if st.session_state.csv_path:
+            with open(st.session_state.csv_path, 'rb') as f:
+                st.download_button(
+                    label="Download Complete Simulation Results (CSV)",
+                    data=f,
+                    file_name=os.path.basename(st.session_state.csv_path),
+                    mime="text/csv"
+                )
+        elif st.session_state.simulation_results_df is not None:
+            buffer = io.StringIO()
+            results_df.to_csv(buffer, index=False)
+            buffer.seek(0)
+            st.download_button(
+                label="Download Complete Simulation Results (CSV)",
+                data=buffer.getvalue(),
+                file_name=f"simulation_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                mime="text/csv"
+            )
+        
         # Display key metrics in a grid
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.markdown('<div class="metric-label">Best Net Profit</div>', unsafe_allow_html=True)
-            best_profit = summary_df['Net Profit'].max()
-            best_scenario = summary_df.loc[summary_df['Net Profit'].idxmax(), 'Scenario']
+            st.markdown('<div class="metric-label">Best Mean Net Profit</div>', unsafe_allow_html=True)
+            best_profit = summary_df['net_profit_mean'].max()
+            best_scenario = summary_df.loc[summary_df['net_profit_mean'].idxmax(), 'scenario']
             st.markdown(f'<div class="metric-value">{format_currency(best_profit)}</div>', unsafe_allow_html=True)
             st.markdown(f'Scenario: {best_scenario}', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
         
         with col2:
-            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.markdown('<div class="metric-label">Worst Net Profit</div>', unsafe_allow_html=True)
-            worst_profit = summary_df['Net Profit'].min()
-            worst_scenario = summary_df.loc[summary_df['Net Profit'].idxmin(), 'Scenario']
+            st.markdown('<div class="metric-label">Worst Mean Net Profit</div>', unsafe_allow_html=True)
+            worst_profit = summary_df['net_profit_mean'].min()
+            worst_scenario = summary_df.loc[summary_df['net_profit_mean'].idxmin(), 'scenario']
             st.markdown(f'<div class="metric-value">{format_currency(worst_profit)}</div>', unsafe_allow_html=True)
             st.markdown(f'Scenario: {worst_scenario}', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
         
         with col3:
-            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
             st.markdown('<div class="metric-label">Profit Range</div>', unsafe_allow_html=True)
             profit_range = best_profit - worst_profit
             st.markdown(f'<div class="metric-value">{format_currency(profit_range)}</div>', unsafe_allow_html=True)
-            st.markdown(f'Difference: {format_percentage(profit_range/abs(worst_profit))}', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f'Difference: {format_percentage(profit_range/abs(worst_profit)) if worst_profit != 0 else "N/A"}', unsafe_allow_html=True)
         
         # Display summary charts
         st.markdown('<div class="subsection-header">Key Metrics by Scenario</div>', unsafe_allow_html=True)
         
+        # Net Profit Box Plot
+        net_profit_data = []
+        for scenario in results_df[results_df['simulation_type'] == 'summary']['scenario'].unique():
+            scenario_data = results_df[
+                (results_df['simulation_type'] == 'summary') & 
+                (results_df['scenario'] == scenario)
+            ]
+            net_profit_data.extend([{
+                'Scenario': scenario,
+                'Net Profit': row['net_profit'],
+                'Total Income': row['total_income'],
+                'Total Expenses': row['total_expenses'],
+                'Total Losses': row['total_losses']
+            } for _, row in scenario_data.iterrows()])
+        
+        net_profit_df = pd.DataFrame(net_profit_data)
+        
+        # Create box plots for key metrics
         col1, col2 = st.columns(2)
         
         with col1:
-            fig = plot_scenario_comparison(summary_df, 'Net Profit', 'Net Profit by Scenario', 'Net Profit')
+            fig = create_box_plot(net_profit_df, 'Scenario', 'Net Profit', 'Net Profit Distribution by Scenario')
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
-            fig = plot_scenario_comparison(summary_df, 'Delinquency Rate', 'Delinquency Rate by Scenario', 'Delinquency Rate')
+            fig = create_box_plot(net_profit_df, 'Scenario', 'Total Income', 'Total Income Distribution by Scenario')
             st.plotly_chart(fig, use_container_width=True)
         
         col1, col2 = st.columns(2)
         
         with col1:
-            fig = plot_income_composition(monthly_df)
+            fig = create_box_plot(net_profit_df, 'Scenario', 'Total Expenses', 'Total Expenses Distribution by Scenario')
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
-            fig = plot_client_distribution(summary_df)
+            fig = create_box_plot(net_profit_df, 'Scenario', 'Total Losses', 'Total Losses Distribution by Scenario')
             st.plotly_chart(fig, use_container_width=True)
+        
+        # Income Composition Over Time
+        st.markdown('<div class="subsection-header">Income Composition Over Time</div>', unsafe_allow_html=True)
+        
+        # Create income composition plot
+        income_data = []
+        for scenario in monthly_df['scenario'].unique():
+            scenario_data = monthly_df[monthly_df['scenario'] == scenario].sort_values('month')
+            for _, row in scenario_data.iterrows():
+                income_data.append({
+                    'Month': row['month'],
+                    'Scenario': scenario,
+                    'Commission Income': row['commission_income_mean'],
+                    'Interest Income': row['interest_income_mean']
+                })
+        
+        income_df = pd.DataFrame(income_data)
+        
+        for scenario in income_df['Scenario'].unique():
+            scenario_data = income_df[income_df['Scenario'] == scenario].set_index('Month')
+            fig = create_stacked_area_plot(
+                scenario_data[['Commission Income', 'Interest Income']], 
+                f'Income Composition - {scenario}'
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        
+        # Client Evolution
+        st.markdown('<div class="subsection-header">Client Evolution</div>', unsafe_allow_html=True)
+        
+        fig = create_line_plot_with_range(monthly_df, 'Active Clients Over Time', 'active_clients')
+        st.plotly_chart(fig, use_container_width=True)
+        
+        fig = create_line_plot_with_range(monthly_df, 'Delinquent Clients Over Time', 'delinquent_clients')
+        st.plotly_chart(fig, use_container_width=True)
     
     # Scenario Comparison Tab
     with tabs[1]:
@@ -526,382 +600,607 @@ if st.session_state.simulation_results:
         # Display summary table
         st.markdown('<div class="subsection-header">Summary Metrics</div>', unsafe_allow_html=True)
         
-        # Format the summary dataframe for display
+        # Create a formatted dataframe for display
         display_df = summary_df.copy()
-        for col in ['Total Income', 'Total Expenses', 'Total Losses', 'Net Profit']:
-            display_df[col] = display_df[col].apply(format_currency)
-        display_df['Delinquency Rate'] = display_df['Delinquency Rate'].apply(format_percentage)
+        display_df['Net Profit Mean'] = display_df['net_profit_mean'].apply(format_currency)
+        display_df['Net Profit Min'] = display_df['net_profit_min'].apply(format_currency)
+        display_df['Net Profit Max'] = display_df['net_profit_max'].apply(format_currency)
+        display_df['Delinquency Rate'] = display_df['delinquency_rate_mean'].apply(format_percentage)
+        display_df['Active Clients'] = display_df['active_clients_final_mean'].apply(lambda x: f"{x:,.0f}")
+        display_df['Initial Clients'] = display_df['num_clients_initial'].apply(lambda x: f"{x:,.0f}")
         
+        # Reorder and rename columns for display
+        display_cols = {
+            'scenario': 'Scenario',
+            'Net Profit Mean': 'Net Profit (Mean)',
+            'Net Profit Min': 'Net Profit (Min)',
+            'Net Profit Max': 'Net Profit (Max)',
+            'Delinquency Rate': 'Delinquency Rate',
+            'Active Clients': 'Active Clients (Final)',
+            'Initial Clients': 'Initial Clients'
+        }
+        
+        display_df = display_df[list(display_cols.keys())].rename(columns=display_cols)
         st.dataframe(display_df, use_container_width=True)
         
         # Monthly metrics comparison
         st.markdown('<div class="subsection-header">Monthly Metrics Comparison</div>', unsafe_allow_html=True)
         
+        # Add scenario selection
+        available_scenarios = monthly_df['scenario'].unique()
+        selected_scenarios = st.multiselect(
+            "Select Scenarios to Display",
+            options=available_scenarios,
+            default=available_scenarios,
+            help="Choose which scenarios to display in the plots below"
+        )
+        
+        # If no scenarios selected, show all
+        if not selected_scenarios:
+            selected_scenarios = available_scenarios
+        
         metric_to_plot = st.selectbox(
             "Select Metric to Plot",
             options=[
+                'Net Profit', 
                 'Total Income', 
                 'Commission Income', 
                 'Interest Income', 
-                'Net Profit', 
                 'Active Clients', 
                 'Delinquent Clients'
             ],
-            index=3
+            index=0
         )
         
-        fig = plot_monthly_metric(
-            monthly_df, 
-            metric_to_plot, 
-            f'{metric_to_plot} Over Time by Scenario', 
-            metric_to_plot
+        # Map display names to column names
+        metric_col_map = {
+            'Net Profit': 'net_profit',
+            'Total Income': 'total_income',
+            'Commission Income': 'commission_income',
+            'Interest Income': 'interest_income',
+            'Active Clients': 'active_clients',
+            'Delinquent Clients': 'delinquent_clients'
+        }
+        
+        metric_col = metric_col_map[metric_to_plot]
+        
+        # Filter monthly_df for selected scenarios
+        filtered_monthly_df = monthly_df[monthly_df['scenario'].isin(selected_scenarios)]
+        
+        # Create line plot with confidence intervals
+        fig = create_line_plot_with_range(filtered_monthly_df, f'{metric_to_plot} Over Time by Scenario', metric_col)
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Box plot for selected metric
+        filtered_results_df = results_df[
+            (results_df['simulation_type'] == 'monthly') & 
+            (results_df['scenario'].isin(selected_scenarios))
+        ]
+        fig = create_box_plot(
+            filtered_results_df,
+            'scenario',
+            metric_col,
+            f'{metric_to_plot} Distribution by Scenario'
         )
         st.plotly_chart(fig, use_container_width=True)
         
         # Cumulative metrics
         st.markdown('<div class="subsection-header">Cumulative Metrics</div>', unsafe_allow_html=True)
         
-        # Calculate cumulative metrics
-        cumulative_df = monthly_df.copy()
-        cumulative_df['Cumulative Income'] = cumulative_df.groupby('Scenario')['Total Income'].cumsum()
-        cumulative_df['Cumulative Expenses'] = cumulative_df.groupby('Scenario')['Expenses'].cumsum()
-        cumulative_df['Cumulative Losses'] = cumulative_df.groupby('Scenario')['Losses'].cumsum()
-        cumulative_df['Cumulative Profit'] = (
-            cumulative_df['Cumulative Income'] - 
-            cumulative_df['Cumulative Expenses'] - 
-            cumulative_df['Cumulative Losses']
-        )
-        
-        cumulative_metric = st.selectbox(
+        cum_metric_to_plot = st.selectbox(
             "Select Cumulative Metric to Plot",
             options=[
-                'Cumulative Income', 
+                'Cumulative Net Profit', 
+                'Cumulative Total Income', 
                 'Cumulative Expenses', 
-                'Cumulative Losses', 
-                'Cumulative Profit'
+                'Cumulative Losses'
             ],
-            index=3
+            index=0
         )
         
-        fig = plot_monthly_metric(
-            cumulative_df, 
-            cumulative_metric, 
-            f'{cumulative_metric} Over Time by Scenario', 
-            cumulative_metric
+        # Map display names to column names
+        cum_metric_col_map = {
+            'Cumulative Net Profit': 'net_profit',
+            'Cumulative Total Income': 'total_income',
+            'Cumulative Expenses': 'expenses',
+            'Cumulative Losses': 'losses'
+        }
+        
+        cum_metric_col = cum_metric_col_map[cum_metric_to_plot]
+        
+        # Create cumulative plot
+        cum_data = []
+        for scenario in monthly_df['scenario'].unique():
+            scenario_data = monthly_df[monthly_df['scenario'] == scenario].sort_values('month')
+            cumulative_values = scenario_data[f'{cum_metric_col}_mean'].cumsum()
+            cumulative_std = np.sqrt((scenario_data[f'{cum_metric_col}_std'] ** 2).cumsum())
+            
+            for i, (_, row) in enumerate(scenario_data.iterrows()):
+                cum_data.append({
+                    'Month': row['month'],
+                    'Scenario': scenario,
+                    'Value': cumulative_values.iloc[i],
+                    'Std': cumulative_std.iloc[i]
+                })
+        
+        cum_df = pd.DataFrame(cum_data)
+        
+        fig = go.Figure()
+        
+        for scenario in cum_df['Scenario'].unique():
+            scenario_data = cum_df[cum_df['Scenario'] == scenario].sort_values('Month')
+            
+            # Add main line
+            fig.add_trace(go.Scatter(
+                x=scenario_data['Month'],
+                y=scenario_data['Value'],
+                name=f"{scenario}",
+                mode='lines',
+                line=dict(width=2)
+            ))
+            
+            # Add confidence interval
+            fig.add_trace(go.Scatter(
+                x=scenario_data['Month'],
+                y=scenario_data['Value'] + 2*scenario_data['Std'],
+                mode='lines',
+                line=dict(width=0),
+                showlegend=False,
+                name=f"{scenario} Upper"
+            ))
+            fig.add_trace(go.Scatter(
+                x=scenario_data['Month'],
+                y=scenario_data['Value'] - 2*scenario_data['Std'],
+                mode='lines',
+                line=dict(width=0),
+                fillcolor='rgba(0,0,0,0.1)',
+                fill='tonexty',
+                showlegend=False,
+                name=f"{scenario} Lower"
+            ))
+        
+        fig.update_layout(
+            title=f"{cum_metric_to_plot} Over Time by Scenario",
+            title_x=0.5,
+            title_font_size=20,
+            height=500,
+            hovermode='x unified',
+            margin=dict(t=50, b=50),
+            xaxis_title="Month",
+            yaxis_title=cum_metric_to_plot.replace('Cumulative ', '')
         )
+        
         st.plotly_chart(fig, use_container_width=True)
     
     # Monthly Analysis Tab
     with tabs[2]:
         st.markdown('<div class="section-header">Monthly Analysis</div>', unsafe_allow_html=True)
         
-        # Select scenario and metrics
-        col1, col2 = st.columns(2)
+        # Select scenario
+        selected_scenario = st.selectbox(
+            "Select Scenario",
+            options=monthly_df['scenario'].unique()
+        )
+        
+        # Filter data for selected scenario
+        scenario_monthly = monthly_df[monthly_df['scenario'] == selected_scenario].sort_values('month')
+        
+        # Display monthly income breakdown
+        st.markdown('<div class="subsection-header">Monthly Income Breakdown</div>', unsafe_allow_html=True)
+        
+        # Create dataframe for area chart
+        income_data = []
+        for _, row in scenario_monthly.iterrows():
+            income_data.append({
+                'Month': row['month'],
+                'Commission Income': row['commission_income_mean'],
+                'Interest Income': row['interest_income_mean']
+            })
+        
+        income_df = pd.DataFrame(income_data).set_index('Month')
+        
+        fig = create_stacked_area_plot(
+            income_df, 
+            f'Monthly Income Breakdown - {selected_scenario}'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Display interest metrics
+        st.markdown('<div class="subsection-header">Interest Metrics</div>', unsafe_allow_html=True)
+        
+        # Create interest metrics plot
+        interest_data = []
+        for _, row in scenario_monthly.iterrows():
+            interest_data.append({
+                'Month': row['month'],
+                'Interest Generated': row['interes_generado_total'],
+                'Interest Paid': row['pagos_interes_total'],
+                'Interest Balance': row['saldo_interes_total'],
+                'Principal Balance': row['saldo_principal_total']
+            })
+        
+        interest_df = pd.DataFrame(interest_data).set_index('Month')
+        
+        # Create subplots for interest metrics
+        fig = make_subplots(rows=2, cols=1, 
+                           subplot_titles=('Interest Generation and Payments', 'Principal and Interest Balances'))
+        
+        # Add interest generation and payments
+        fig.add_trace(go.Scatter(
+            x=interest_df.index,
+            y=interest_df['Interest Generated'],
+            name='Interest Generated',
+            line=dict(color='blue')
+        ), row=1, col=1)
+        
+        fig.add_trace(go.Scatter(
+            x=interest_df.index,
+            y=interest_df['Interest Paid'],
+            name='Interest Paid',
+            line=dict(color='green')
+        ), row=1, col=1)
+        
+        # Add balances
+        fig.add_trace(go.Scatter(
+            x=interest_df.index,
+            y=interest_df['Principal Balance'],
+            name='Principal Balance',
+            line=dict(color='red')
+        ), row=2, col=1)
+        
+        fig.add_trace(go.Scatter(
+            x=interest_df.index,
+            y=interest_df['Interest Balance'],
+            name='Interest Balance',
+            line=dict(color='orange')
+        ), row=2, col=1)
+        
+        fig.update_layout(
+            height=800,
+            showlegend=True,
+            title_text=f"Interest Metrics - {selected_scenario}",
+            title_x=0.5,
+            title_font_size=20
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Display interest collection rate
+        st.markdown('<div class="subsection-header">Interest Collection Rate</div>', unsafe_allow_html=True)
+        
+        # Calculate interest collection rate
+        collection_data = []
+        for _, row in scenario_monthly.iterrows():
+            if row['interes_generado_total'] > 0:
+                collection_rate = row['pagos_interes_total'] / row['interes_generado_total']
+            else:
+                collection_rate = 0
+            collection_data.append({
+                'Month': row['month'],
+                'Collection Rate': collection_rate
+            })
+        
+        collection_df = pd.DataFrame(collection_data)
+        
+        fig = go.Figure()
+        
+        fig.add_trace(go.Scatter(
+            x=collection_df['Month'],
+            y=collection_df['Collection Rate'],
+            name='Interest Collection Rate',
+            mode='lines+markers',
+            line=dict(width=2)
+        ))
+        
+        fig.update_layout(
+            title=f'Monthly Interest Collection Rate - {selected_scenario}',
+            title_x=0.5,
+            title_font_size=20,
+            height=500,
+            hovermode='x unified',
+            margin=dict(t=50, b=50),
+            xaxis_title="Month",
+            yaxis_title="Collection Rate",
+            yaxis_tickformat=',.1%'
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Interest Analysis Tab
+    with tabs[3]:
+        st.markdown('<div class="section-header">Interest Analysis</div>', unsafe_allow_html=True)
+        
+        # Select scenario
+        selected_scenario = st.selectbox(
+            "Select Scenario for Interest Analysis",
+            options=monthly_df['scenario'].unique()
+        )
+        
+        # Filter data for selected scenario
+        scenario_monthly = monthly_df[monthly_df['scenario'] == selected_scenario].sort_values('month')
+        
+        # Calculate cumulative interest metrics
+        cumulative_data = []
+        cum_interest_generated = 0
+        cum_interest_paid = 0
+        
+        for _, row in scenario_monthly.iterrows():
+            cum_interest_generated += row['interes_generado_total']
+            cum_interest_paid += row['pagos_interes_total']
+            
+            cumulative_data.append({
+                'Month': row['month'],
+                'Cumulative Interest Generated': cum_interest_generated,
+                'Cumulative Interest Paid': cum_interest_paid,
+                'Cumulative Principal Balance': row['saldo_principal_total'],
+                'Cumulative Interest Balance': row['saldo_interes_total']
+            })
+        
+        cumulative_df = pd.DataFrame(cumulative_data)
+        
+        # Display cumulative interest metrics
+        st.markdown('<div class="subsection-header">Cumulative Interest Metrics</div>', unsafe_allow_html=True)
+        
+        fig = go.Figure()
+        
+        # Add cumulative interest generated
+        fig.add_trace(go.Scatter(
+            x=cumulative_df['Month'],
+            y=cumulative_df['Cumulative Interest Generated'],
+            name='Cumulative Interest Generated',
+            line=dict(color='blue', width=2)
+        ))
+        
+        # Add cumulative interest paid
+        fig.add_trace(go.Scatter(
+            x=cumulative_df['Month'],
+            y=cumulative_df['Cumulative Interest Paid'],
+            name='Cumulative Interest Paid',
+            line=dict(color='green', width=2)
+        ))
+        
+        # Add cumulative interest balance
+        fig.add_trace(go.Scatter(
+            x=cumulative_df['Month'],
+            y=cumulative_df['Cumulative Interest Balance'],
+            name='Cumulative Interest Balance',
+            line=dict(color='orange', width=2)
+        ))
+        
+        fig.update_layout(
+            title=f'Cumulative Interest Metrics - {selected_scenario}',
+            title_x=0.5,
+            title_font_size=20,
+            height=500,
+            hovermode='x unified',
+            margin=dict(t=50, b=50),
+            xaxis_title="Month",
+            yaxis_title="Amount"
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Display interest efficiency metrics
+        st.markdown('<div class="subsection-header">Interest Efficiency Metrics</div>', unsafe_allow_html=True)
+        
+        # Calculate interest efficiency metrics
+        efficiency_data = []
+        for _, row in scenario_monthly.iterrows():
+            if row['saldo_principal_total'] > 0:
+                interest_rate = (row['interes_generado_total'] / row['saldo_principal_total']) * 12 * 100
+            else:
+                interest_rate = 0
+                
+            if row['interes_generado_total'] > 0:
+                collection_rate = row['pagos_interes_total'] / row['interes_generado_total']
+            else:
+                collection_rate = 0
+                
+            efficiency_data.append({
+                'Month': row['month'],
+                'Effective Interest Rate (%)': interest_rate,
+                'Interest Collection Rate': collection_rate,
+                'Interest Balance / Principal Balance': row['saldo_interes_total'] / row['saldo_principal_total'] if row['saldo_principal_total'] > 0 else 0
+            })
+        
+        efficiency_df = pd.DataFrame(efficiency_data)
+        
+        # Create subplots for efficiency metrics
+        fig = make_subplots(rows=3, cols=1, 
+                           subplot_titles=('Effective Interest Rate', 'Interest Collection Rate', 
+                                         'Interest/Principal Balance Ratio'))
+        
+        # Add effective interest rate
+        fig.add_trace(go.Scatter(
+            x=efficiency_df['Month'],
+            y=efficiency_df['Effective Interest Rate (%)'],
+            name='Effective Interest Rate',
+            line=dict(color='blue')
+        ), row=1, col=1)
+        
+        # Add interest collection rate
+        fig.add_trace(go.Scatter(
+            x=efficiency_df['Month'],
+            y=efficiency_df['Interest Collection Rate'],
+            name='Interest Collection Rate',
+            line=dict(color='green')
+        ), row=2, col=1)
+        
+        # Add interest/principal ratio
+        fig.add_trace(go.Scatter(
+            x=efficiency_df['Month'],
+            y=efficiency_df['Interest Balance / Principal Balance'],
+            name='Interest/Principal Ratio',
+            line=dict(color='orange')
+        ), row=3, col=1)
+        
+        fig.update_layout(
+            height=1000,
+            showlegend=True,
+            title_text=f"Interest Efficiency Metrics - {selected_scenario}",
+            title_x=0.5,
+            title_font_size=20
+        )
+        
+        # Update y-axis formats
+        fig.update_yaxes(title_text="Rate (%)", row=1, col=1)
+        fig.update_yaxes(title_text="Collection Rate", row=2, col=1)
+        fig.update_yaxes(title_text="Ratio", row=3, col=1)
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Display interest metrics summary
+        st.markdown('<div class="subsection-header">Interest Metrics Summary</div>', unsafe_allow_html=True)
+        
+        # Calculate summary metrics
+        total_interest_generated = cumulative_df['Cumulative Interest Generated'].iloc[-1]
+        total_interest_paid = cumulative_df['Cumulative Interest Paid'].iloc[-1]
+        final_interest_balance = cumulative_df['Cumulative Interest Balance'].iloc[-1]
+        final_principal_balance = cumulative_df['Cumulative Principal Balance'].iloc[-1]
+        
+        # Create summary metrics display
+        col1, col2, col3 = st.columns(3)
         
         with col1:
-            selected_scenario = st.selectbox(
-                "Select Scenario",
-                options=monthly_df['Scenario'].unique(),
-                index=2  # Default to neutral scenario
+            st.metric(
+                "Total Interest Generated",
+                f"${total_interest_generated:,.2f}",
+                f"${total_interest_generated/len(cumulative_df):,.2f}/month"
             )
         
         with col2:
-            selected_metrics = st.multiselect(
-                "Select Metrics to Display",
-                options=[
-                    'Commission Income', 
-                    'Interest Income', 
-                    'Total Income', 
-                    'Expenses', 
-                    'Losses', 
-                    'Net Profit'
-                ],
-                default=['Total Income', 'Net Profit']
+            st.metric(
+                "Total Interest Paid",
+                f"${total_interest_paid:,.2f}",
+                f"${total_interest_paid/len(cumulative_df):,.2f}/month"
             )
         
-        # Filter data for selected scenario
-        scenario_monthly_df = monthly_df[monthly_df['Scenario'] == selected_scenario]
-        
-        # Plot selected metrics
-        if selected_metrics:
-            fig = go.Figure()
-            
-            for metric in selected_metrics:
-                fig.add_trace(go.Scatter(
-                    x=scenario_monthly_df['Month'],
-                    y=scenario_monthly_df[metric],
-                    mode='lines+markers',
-                    name=metric
-                ))
-            
-            fig.update_layout(
-                title=f'Monthly Metrics for {selected_scenario} Scenario',
-                xaxis_title='Month',
-                yaxis_title='Amount',
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                height=500
+        with col3:
+            st.metric(
+                "Final Interest Balance",
+                f"${final_interest_balance:,.2f}",
+                f"{final_interest_balance/final_principal_balance:.1%} of principal"
             )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Monthly client evolution
-        st.markdown('<div class="subsection-header">Client Evolution</div>', unsafe_allow_html=True)
-        
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=scenario_monthly_df['Month'],
-            y=scenario_monthly_df['Active Clients'],
-            mode='lines+markers',
-            name='Active Clients'
-        ))
-        fig.add_trace(go.Scatter(
-            x=scenario_monthly_df['Month'],
-            y=scenario_monthly_df['Delinquent Clients'],
-            mode='lines+markers',
-            name='Delinquent Clients'
-        ))
-        
-        fig.update_layout(
-            title=f'Client Evolution for {selected_scenario} Scenario',
-            xaxis_title='Month',
-            yaxis_title='Number of Clients',
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            height=500
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Seasonality analysis
-        st.markdown('<div class="subsection-header">Seasonality Analysis</div>', unsafe_allow_html=True)
-        
-        # Add month of year to the dataframe
-        scenario_monthly_df['Month Label'] = scenario_monthly_df['Year'].astype(str) + '-' + scenario_monthly_df['Month of Year'].astype(str).str.zfill(2)
-        
-        # Group by month of year
-        monthly_avg = scenario_monthly_df.groupby('Month of Year')[['Total Income', 'Net Profit']].mean().reset_index()
-        
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
-            x=monthly_avg['Month of Year'],
-            y=monthly_avg['Total Income'],
-            name='Avg. Total Income'
-        ))
-        fig.add_trace(go.Bar(
-            x=monthly_avg['Month of Year'],
-            y=monthly_avg['Net Profit'],
-            name='Avg. Net Profit'
-        ))
-        
-        fig.update_layout(
-            title=f'Monthly Averages for {selected_scenario} Scenario',
-            xaxis_title='Month of Year',
-            yaxis_title='Amount',
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            height=500
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
     
-    # Individual Scenario Tabs (Optimistic, Neutral, Pessimistic)
-    for i, scenario_name in enumerate(['optimistic', 'neutral', 'pessimistic']):
-        with tabs[i+3]:
-            scenario_data = results[scenario_name]
-            
-            st.markdown(f'<div class="section-header">{scenario_name.capitalize()} Scenario Analysis</div>', unsafe_allow_html=True)
-            
-            # Key metrics
-            col1, col2, col3, col4 = st.columns(4)
-            
-            with col1:
-                st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-                st.markdown('<div class="metric-label">Net Profit</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="metric-value">{format_currency(scenario_data["ganancia_neta"])}</div>', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-                st.markdown('<div class="metric-label">Total Income</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="metric-value">{format_currency(scenario_data["ingresos_totales"])}</div>', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-                st.markdown('<div class="metric-label">Delinquency Rate</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="metric-value">{format_percentage(scenario_data["tasa_morosidad"])}</div>', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-            
-            with col4:
-                st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-                st.markdown('<div class="metric-label">Active Clients</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="metric-value">{scenario_data["clientes_activos_final"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'of {scenario_data["parametros"]["num_clientes"]} initial', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Profit breakdown
-            st.markdown('<div class="subsection-header">Profit Breakdown</div>', unsafe_allow_html=True)
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                fig = plot_profit_waterfall(scenario_data)
-                st.plotly_chart(fig, use_container_width=True)
-            
-            with col2:
-                fig = plot_monthly_income_breakdown(scenario_data)
-                st.plotly_chart(fig, use_container_width=True)
-            
-            # Client analysis
-            st.markdown('<div class="subsection-header">Client Analysis</div>', unsafe_allow_html=True)
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                fig = plot_client_evolution(scenario_data)
-                st.plotly_chart(fig, use_container_width=True)
-            
-            with col2:
-                # Monthly delinquency rate
-                monthly_data = pd.DataFrame([
-                    {
-                        'Month': m['mes_global'],
-                        'Delinquency Rate': m['clientes_morosos'] / (m['clientes_activos'] + m['clientes_morosos'])
-                    }
-                    for m in scenario_data['resultados_mes']
-                ])
-                
-                fig = px.line(
-                    monthly_data,
-                    x='Month',
-                    y='Delinquency Rate',
-                    title='Monthly Delinquency Rate',
-                    labels={'Month': 'Month', 'Delinquency Rate': 'Delinquency Rate'},
-                    markers=True
-                )
-                fig.update_layout(height=500)
-                st.plotly_chart(fig, use_container_width=True)
-            
-            # Monthly metrics
-            st.markdown('<div class="subsection-header">Monthly Metrics</div>', unsafe_allow_html=True)
-            
-            monthly_metrics = pd.DataFrame([
-                {
-                    'Month': m['mes_global'],
-                    'Year': m['anio'],
-                    'Month of Year': m['mes'],
-                    'Commission Income': m['ingresos_comisiones'],
-                    'Interest Income': m['ingresos_intereses'],
-                    'Total Income': m['ingresos'],
-                    'Expenses': m['gastos'],
-                    'Losses': m['perdidas'],
-                    'Net Profit': m['ingresos'] - m['gastos'] - m['perdidas'],
-                    'Active Clients': m['clientes_activos'],
-                    'Delinquent Clients': m['clientes_morosos']
-                }
-                for m in scenario_data['resultados_mes']
-            ])
-            
-            st.dataframe(monthly_metrics, use_container_width=True)
+    # Distribution Analysis Tab
+    with tabs[4]:
+        st.markdown('<div class="section-header">Distribution Analysis</div>', unsafe_allow_html=True)
+        
+        # Display distribution plots
+        st.markdown('<div class="subsection-header">Net Profit Distribution</div>', unsafe_allow_html=True)
+        fig = create_distribution_plot(results_df, 'net_profit', 'Net Profit Distribution')
+        st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown('<div class="subsection-header">Total Income Distribution</div>', unsafe_allow_html=True)
+        fig = create_distribution_plot(results_df, 'total_income', 'Total Income Distribution')
+        st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown('<div class="subsection-header">Total Expenses Distribution</div>', unsafe_allow_html=True)
+        fig = create_distribution_plot(results_df, 'total_expenses', 'Total Expenses Distribution')
+        st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown('<div class="subsection-header">Total Losses Distribution</div>', unsafe_allow_html=True)
+        fig = create_distribution_plot(results_df, 'total_losses', 'Total Losses Distribution')
+        st.plotly_chart(fig, use_container_width=True)
     
     # Raw Data Tab
-    with tabs[6]:
+    with tabs[5]:
         st.markdown('<div class="section-header">Raw Data</div>', unsafe_allow_html=True)
         
         # Select which data to view
         data_view = st.radio(
             "Select Data to View",
-            options=["Summary Data", "Monthly Data", "Client Data", "Parameters"],
+            options=["Summary Statistics", "Monthly Statistics", "Full Simulation Data"],
             horizontal=True
         )
         
-        if data_view == "Summary Data":
-            st.markdown('<div class="subsection-header">Summary Data</div>', unsafe_allow_html=True)
+        if data_view == "Summary Statistics":
+            st.markdown('<div class="subsection-header">Summary Statistics</div>', unsafe_allow_html=True)
             st.dataframe(summary_df, use_container_width=True)
             
             # Download button
             csv = summary_df.to_csv(index=False)
             st.download_button(
-                label="Download Summary Data as CSV",
+                label="Download Summary Statistics as CSV",
                 data=csv,
-                file_name="credit_card_simulation_summary.csv",
+                file_name="credit_card_simulation_summary_stats.csv",
                 mime="text/csv"
             )
-        
-        elif data_view == "Monthly Data":
-            st.markdown('<div class="subsection-header">Monthly Data</div>', unsafe_allow_html=True)
+            
+        elif data_view == "Monthly Statistics":
+            st.markdown('<div class="subsection-header">Monthly Statistics</div>', unsafe_allow_html=True)
             
             # Filter by scenario
             scenario_filter = st.selectbox(
                 "Filter by Scenario",
-                options=["All Scenarios"] + list(monthly_df['Scenario'].unique())
+                options=["All Scenarios"] + list(monthly_df['scenario'].unique())
             )
             
             if scenario_filter == "All Scenarios":
                 filtered_df = monthly_df
             else:
-                filtered_df = monthly_df[monthly_df['Scenario'] == scenario_filter]
+                filtered_df = monthly_df[monthly_df['scenario'] == scenario_filter]
             
             st.dataframe(filtered_df, use_container_width=True)
             
             # Download button
             csv = filtered_df.to_csv(index=False)
             st.download_button(
-                label="Download Monthly Data as CSV",
+                label="Download Monthly Statistics as CSV",
                 data=csv,
-                file_name=f"credit_card_simulation_monthly_{scenario_filter.lower().replace(' ', '_')}.csv",
+                file_name=f"credit_card_simulation_monthly_stats_{scenario_filter.lower().replace(' ', '_')}.csv",
                 mime="text/csv"
             )
-        
-        elif data_view == "Client Data":
-            st.markdown('<div class="subsection-header">Client Data (Last Month)</div>', unsafe_allow_html=True)
             
-            # Select scenario
-            scenario = st.selectbox(
-                "Select Scenario",
-                options=list(results.keys())
-            )
+        elif data_view == "Full Simulation Data":
+            st.markdown('<div class="subsection-header">Full Simulation Data</div>', unsafe_allow_html=True)
             
-            # Get client data for the selected scenario
-            client_data = pd.DataFrame(results[scenario]['resultados_clientes'])
+            # Let user see a sample of the data
+            st.write("Showing a sample of the full simulation data")
+            st.dataframe(results_df.sample(min(1000, len(results_df))), use_container_width=True)
             
-            st.dataframe(client_data, use_container_width=True)
+            st.write(f"Full dataset has {len(results_df)} rows and is available for download at the top of the Summary tab.")
             
-            # Download button
-            csv = client_data.to_csv(index=False)
-            st.download_button(
-                label="Download Client Data as CSV",
-                data=csv,
-                file_name=f"credit_card_simulation_clients_{scenario}.csv",
-                mime="text/csv"
-            )
-        
-        elif data_view == "Parameters":
-            st.markdown('<div class="subsection-header">Simulation Parameters</div>', unsafe_allow_html=True)
+            # Allow filtering
+            show_full_data = st.checkbox("Show filtered full data (may be slow for large datasets)")
             
-            # Select scenario
-            scenario = st.selectbox(
-                "Select Scenario",
-                options=list(results.keys())
-            )
-            
-            # Get parameters for the selected scenario
-            param_data = results[scenario]['parametros']
-            
-            # Convert to DataFrame for better display
-            param_df = pd.DataFrame([(k, v) for k, v in param_data.items()], columns=['Parameter', 'Value'])
-            
-            st.dataframe(param_df, use_container_width=True)
-            
-            # Download button
-            json_str = json.dumps(param_data, indent=4)
-            st.download_button(
-                label="Download Parameters as JSON",
-                data=json_str,
-                file_name=f"credit_card_simulation_parameters_{scenario}.json",
-                mime="application/json"
-            )
+            if show_full_data:
+                # Filter options
+                col1, col2 = st.columns(2)
+                with col1:
+                    scenario_filter = st.selectbox(
+                        "Filter by Scenario (Full Data)",
+                        options=["All Scenarios"] + list(results_df['scenario'].unique())
+                    )
+                
+                with col2:
+                    sim_type_filter = st.selectbox(
+                        "Filter by Simulation Type",
+                        options=["All Types", "summary", "monthly"]
+                    )
+                
+                # Apply filters
+                filtered_raw_df = results_df.copy()
+                
+                if scenario_filter != "All Scenarios":
+                    filtered_raw_df = filtered_raw_df[filtered_raw_df['scenario'] == scenario_filter]
+                
+                if sim_type_filter != "All Types":
+                    filtered_raw_df = filtered_raw_df[filtered_raw_df['simulation_type'] == sim_type_filter]
+                
+                st.dataframe(filtered_raw_df, use_container_width=True)
+                
+                # Download filtered data
+                csv = filtered_raw_df.to_csv(index=False)
+                st.download_button(
+                    label="Download Filtered Data as CSV",
+                    data=csv,
+                    file_name=f"credit_card_simulation_filtered_data.csv",
+                    mime="text/csv"
+                )
 else:
     # Display instructions if no simulation has been run
-    st.info("Set your parameters in the sidebar and click 'Run Simulation' to start.")
+    st.info("Set your parameters in the sidebar and click 'Run Simulation' to start, or upload an existing simulation results file.")
     
     # Display sample images or explanations
     st.markdown('<div class="section-header">How to Use This Dashboard</div>', unsafe_allow_html=True)
@@ -911,14 +1210,15 @@ else:
     
     2. **Run Simulation**: Click the "Run Simulation" button to start the simulation. This may take a few minutes depending on the number of clients and years.
     
-    3. **Explore Results**: Once the simulation is complete, you can explore the results in different tabs:
+    3. **Or Load Existing Results**: Upload a previously saved simulation results CSV file.
+    
+    4. **Explore Results**: Once the simulation is complete or results are loaded, you can explore the results in different tabs:
        - **Summary**: Overview of key metrics across all scenarios
        - **Scenario Comparison**: Compare different scenarios side by side
        - **Monthly Analysis**: Analyze monthly trends for a specific scenario
-       - **Individual Scenario Tabs**: Detailed analysis of each scenario
        - **Raw Data**: Access the raw simulation data
     
-    4. **Save Results**: You can save the simulation results to disk by checking the "Save Results to Disk" option before running the simulation.
+    5. **Save Results**: All simulation results are saved as a single CSV file that you can download from the Summary tab.
     """)
     
     st.markdown('<div class="section-header">About the Model</div>', unsafe_allow_html=True)
