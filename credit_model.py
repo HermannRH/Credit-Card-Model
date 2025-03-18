@@ -11,8 +11,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from model_simulation import (
     CreditCardParams,
-    simular_escenarios_paralelo,
-    guardar_resultados
+    simular_escenarios_secuencial
 )
 
 # Set page configuration
@@ -363,9 +362,6 @@ costo_emision_pes = st.sidebar.number_input("Pessimistic Cost per Card", min_val
 # Simulation parameters
 st.sidebar.markdown('<div class="subsection-header">Simulation Parameters</div>', unsafe_allow_html=True)
 num_years = st.sidebar.slider("Number of Years to Simulate", min_value=1, max_value=10, value=3, step=1)
-num_processes = st.sidebar.slider("Number of Processes", min_value=1, max_value=mp.cpu_count(), value=mp.cpu_count(), step=1)
-
-# Add number of seeds parameter
 num_seeds = st.sidebar.number_input("Number of Seeds", min_value=1, max_value=10000, value=100, step=50)
 
 # Create parameter object
@@ -408,18 +404,15 @@ if st.sidebar.button("Run Simulation", type="primary"):
         
         # Run simulation with multiple seeds
         st.text("Step 1/3: Running Monte Carlo simulations...")
-        results = simular_escenarios_paralelo(params, num_years=num_years, num_procesos=num_processes, num_seeds=num_seeds)
-        
-        # Save results to a single CSV file
-        st.text("Step 2/3: Saving results to CSV...")
-        csv_path = guardar_resultados(results, save_directory)
+        csv_path = simular_escenarios_secuencial(params, num_years=num_years, num_seeds=num_seeds, directorio=save_directory)
         st.session_state.csv_path = csv_path
         
         # Load the saved CSV for analysis
-        st.text("Step 3/3: Processing results for visualization...")
+        st.text("Step 2/3: Processing results for visualization...")
         results_df = pd.read_csv(csv_path)
         
         # Process results into summary and monthly statistics
+        st.text("Step 3/3: Generating visualizations...")
         summary_stats_df, monthly_stats_df = process_simulation_results(results_df)
         
         # Store in session state

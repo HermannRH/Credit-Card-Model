@@ -2,26 +2,30 @@ import numpy as np
 import pandas as pd
 import random
 from tqdm.auto import tqdm
-import multiprocessing as mp
-from itertools import product
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Any, Optional
 import os
 import json
 from datetime import datetime
-import concurrent.futures
-import psutil
-import sys
-import signal
+import logging
 import time
-from functools import partial
+import gc
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('simulation.log'),
+        logging.StreamHandler()
+    ]
+)
 
 # Constants for resource limits
 MAX_MEMORY_PERCENT = 80  # Maximum memory usage percentage
-MAX_PROCESSES = 4  # Maximum number of processes to use
-CHUNK_SIZE = 10  # Number of simulations to process in each chunk
-TIMEOUT_SECONDS = 3600  # Maximum time for a single simulation (1 hour)
+BATCH_SIZE = 5  # Number of simulations to process before saving
+SAVE_INTERVAL = 300  # Save results every 5 minutes
 
 @dataclass
 class CreditCardParams:
@@ -53,28 +57,19 @@ class CreditCardParams:
     
     # Simulation parameters
     semilla_aleatoria: int  # Random seed for reproducibility
-    
+
     def get_scenario_params(self, scenario: str) -> Dict[str, Any]:
-        """
-        Get parameter values for a specific scenario.
-        
-        Args:
-            scenario: One of 'optimistic', 'neutral', 'pessimistic', 'opt_neut', or 'pes_neut'
-        
-        Returns:
-            Dictionary of parameter values for the specified scenario
-        """
+        """Get parameter values for a specific scenario."""
         idx_map = {
             'optimistic': 0,
             'neutral': 1,
             'pessimistic': 2,
-            'opt_neut': 0.5,  # Will interpolate between optimistic and neutral
-            'pes_neut': 1.5,  # Will interpolate between neutral and pessimistic
+            'opt_neut': 0.5,
+            'pes_neut': 1.5,
         }
         
         idx = idx_map[scenario]
         
-        # For interpolated scenarios
         if isinstance(idx, float):
             base_idx = int(idx)
             interp_factor = idx - base_idx
@@ -89,7 +84,6 @@ class CreditCardParams:
                     val1 = value[base_idx]
                     val2 = value[base_idx + 1]
                     interpolated_value = val1 + interp_factor * (val2 - val1)
-                    # Ensure num_clientes is always an integer
                     if key == 'num_clientes':
                         result[key] = int(round(interpolated_value))
                     else:
@@ -99,7 +93,6 @@ class CreditCardParams:
             
             return result
         
-        # For direct scenarios
         result = {}
         for key, value in self.__dict__.items():
             if key == 'semilla_aleatoria':
@@ -113,6 +106,198 @@ class CreditCardParams:
         
         return result
 
+def generar_escenarios(params: CreditCardParams) -> List[Tuple[str, Dict[str, Any]]]:
+    """Generate all possible scenarios based on parameters."""
+    escenarios = ['optimistic', 'opt_neut', 'neutral', 'pes_neut', 'pessimistic']
+    return [(escenario, params.get_scenario_params(escenario)) for escenario in escenarios]
+
+def simular_escenario(nombre_escenario: str, params: Dict[str, Any], num_years: int) -> Optional[Dict[str, Any]]:
+    """
+    Simulate a specific scenario with error handling.
+    
+    Args:
+        nombre_escenario: Name of the scenario
+        params: Scenario parameters
+        num_years: Number of years to simulate
+        
+    Returns:
+        Simulation results or None if simulation failed
+    """
+    try:
+        logging.info(f"Starting simulation for scenario: {nombre_escenario}")
+        resultados = simular_cartera(params, num_years)
+        logging.info(f"Successfully completed simulation for scenario: {nombre_escenario}")
+        return resultados
+    except Exception as e:
+        logging.error(f"Error in simulation for scenario {nombre_escenario}: {str(e)}")
+        return None
+
+def save_batch_results(batch_results: List[Dict[str, Any]], directorio: str, batch_number: int) -> None:
+    """Save a batch of results to CSV."""
+    try:
+        if not os.path.exists(directorio):
+            os.makedirs(directorio)
+            
+        # Process batch results
+        processed_results = []
+        for result in batch_results:
+            if result is None:
+                continue
+                
+            try:
+                # Add summary metrics
+                summary_row = {
+                    'scenario': result['scenario'],
+                    'seed': result['seed'],
+                    'total_income': result['ingresos_totales'],
+                    'total_expenses': result['gastos_totales'],
+                    'total_losses': result['perdidas_totales'],
+                    'net_profit': result['ganancia_neta'],
+                    'delinquency_rate': result['tasa_morosidad'],
+                    'active_clients_final': result['clientes_activos_final'],
+                    'num_clients_initial': result['parametros']['num_clientes'],
+                    'simulation_type': 'summary'
+                }
+                processed_results.append(summary_row)
+                
+                # Add monthly results
+                for month_data in result['resultados_mes']:
+                    month_row = {
+                        'scenario': result['scenario'],
+                        'seed': result['seed'],
+                        'month': month_data['mes_global'],
+                        'year': month_data['anio'],
+                        'month_of_year': month_data['mes'],
+                        'commission_income': month_data['ingresos_comisiones'],
+                        'interest_income': month_data['ingresos_intereses'],
+                        'total_income': month_data['ingresos'],
+                        'expenses': month_data['gastos'],
+                        'losses': month_data['perdidas'],
+                        'net_profit': month_data['ingresos'] - month_data['gastos'] - month_data['perdidas'],
+                        'active_clients': month_data['clientes_activos'],
+                        'delinquent_clients': month_data['clientes_morosos'],
+                        'interes_generado_total': month_data['interes_generado_total'],
+                        'pagos_interes_total': month_data['pagos_interes_total'],
+                        'saldo_principal_total': month_data['saldo_principal_total'],
+                        'saldo_interes_total': month_data['saldo_interes_total'],
+                        'simulation_type': 'monthly'
+                    }
+                    processed_results.append(month_row)
+                    
+            except Exception as e:
+                logging.error(f"Error processing result: {str(e)}")
+                continue
+        
+        if processed_results:
+            # Save batch to CSV
+            batch_df = pd.DataFrame(processed_results)
+            batch_file = f"{directorio}/simulation_results_batch_{batch_number}.csv"
+            batch_df.to_csv(batch_file, index=False)
+            logging.info(f"Saved batch {batch_number} to {batch_file}")
+            
+    except Exception as e:
+        logging.error(f"Error saving batch {batch_number}: {str(e)}")
+
+def simular_escenarios_secuencial(params: CreditCardParams, num_years: int = 1, 
+                                num_seeds: int = 1000, directorio: str = "resultados_simulacion") -> str:
+    """
+    Simulate all scenarios sequentially with better error handling and logging.
+    
+    Args:
+        params: CreditCardParams object with optimistic, neutral, and pessimistic values
+        num_years: Number of years to simulate
+        num_seeds: Number of random seeds to simulate
+        directorio: Directory to save results
+        
+    Returns:
+        Path to the final results file
+    """
+    try:
+        logging.info("Starting sequential simulation")
+        escenarios = generar_escenarios(params)
+        all_args = []
+        
+        # Generate all simulation arguments
+        for nombre, params_escenario in escenarios:
+            for seed in range(num_seeds):
+                params_with_seed = params_escenario.copy()
+                params_with_seed['semilla_aleatoria'] = seed
+                all_args.append((nombre, params_with_seed, num_years))
+        
+        total_simulations = len(all_args)
+        logging.info(f"Total simulations to run: {total_simulations}")
+        
+        # Process simulations in batches
+        batch_results = []
+        batch_number = 1
+        last_save_time = time.time()
+        
+        with tqdm(total=total_simulations, desc="Running simulations") as pbar:
+            for i, (nombre, params, years) in enumerate(all_args):
+                try:
+                    # Run simulation
+                    result = simular_escenario(nombre, params, years)
+                    if result is not None:
+                        result['scenario'] = nombre
+                        result['seed'] = params['semilla_aleatoria']
+                        batch_results.append(result)
+                    
+                    # Update progress
+                    pbar.update(1)
+                    
+                    # Save batch if needed
+                    current_time = time.time()
+                    if (len(batch_results) >= BATCH_SIZE or 
+                        current_time - last_save_time >= SAVE_INTERVAL):
+                        save_batch_results(batch_results, directorio, batch_number)
+                        batch_results = []
+                        batch_number += 1
+                        last_save_time = current_time
+                        
+                        # Force garbage collection
+                        gc.collect()
+                        
+                except Exception as e:
+                    logging.error(f"Error in simulation {i}: {str(e)}")
+                    continue
+        
+        # Save any remaining results
+        if batch_results:
+            save_batch_results(batch_results, directorio, batch_number)
+        
+        # Combine all batch files
+        final_file = f"{directorio}/simulation_results.csv"
+        batch_files = sorted([f for f in os.listdir(directorio) if f.startswith("simulation_results_batch_")])
+        
+        if batch_files:
+            # Read and combine all batch files
+            dfs = []
+            for batch_file in batch_files:
+                try:
+                    df = pd.read_csv(os.path.join(directorio, batch_file))
+                    dfs.append(df)
+                except Exception as e:
+                    logging.error(f"Error reading batch file {batch_file}: {str(e)}")
+                    continue
+            
+            if dfs:
+                final_df = pd.concat(dfs, ignore_index=True)
+                final_df.to_csv(final_file, index=False)
+                logging.info(f"Successfully combined all results into {final_file}")
+                
+                # Clean up batch files
+                for batch_file in batch_files:
+                    try:
+                        os.remove(os.path.join(directorio, batch_file))
+                    except Exception as e:
+                        logging.error(f"Error removing batch file {batch_file}: {str(e)}")
+        
+        logging.info("Simulation completed successfully")
+        return final_file
+        
+    except Exception as e:
+        logging.error(f"Fatal error in simulation: {str(e)}")
+        raise
 
 def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any]:
     """
@@ -354,505 +539,44 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
         'parametros': params
     }
 
-
-def generar_escenarios(params: CreditCardParams) -> List[Tuple[str, Dict[str, Any]]]:
-    """
-    Genera todos los escenarios posibles basados en los parámetros.
-    
-    Args:
-        params: Objeto CreditCardParams con los valores optimistas, neutrales y pesimistas
-        
-    Returns:
-        Lista de tuplas (nombre_escenario, parámetros)
-    """
-    escenarios = ['optimistic', 'opt_neut', 'neutral', 'pes_neut', 'pessimistic']
-    return [(escenario, params.get_scenario_params(escenario)) for escenario in escenarios]
-
-
-def simular_escenario(args: Tuple[str, Dict[str, Any], int]) -> Tuple[str, Dict[str, Any]]:
-    """
-    Simula un escenario específico.
-    
-    Args:
-        args: Tupla con (nombre_escenario, parámetros, num_years)
-        
-    Returns:
-        Tupla con (nombre_escenario, resultados)
-    """
-    nombre_escenario, params, num_years = args
-    resultados = simular_cartera(params, num_years)
-    return (nombre_escenario, resultados)
-
-
-def get_safe_process_count():
-    """Get a safe number of processes to use based on system resources."""
-    cpu_count = mp.cpu_count()
-    memory = psutil.virtual_memory()
-    
-    # Limit processes based on available memory
-    safe_processes = min(
-        cpu_count,
-        MAX_PROCESSES,
-        int(memory.available / (1024 * 1024 * 1024))  # Convert to GB
-    )
-    
-    return max(1, safe_processes)
-
-
-def check_memory_usage():
-    """Check if memory usage is within safe limits."""
-    memory = psutil.virtual_memory()
-    return memory.percent < MAX_MEMORY_PERCENT
-
-
-def process_chunk(chunk_args: List[Tuple[str, Dict[str, Any], int]], timeout: int = TIMEOUT_SECONDS) -> List[Tuple[str, Dict[str, Any]]]:
-    """
-    Process a chunk of simulations with timeout and error handling.
-    
-    Args:
-        chunk_args: List of (scenario_name, params, num_years) tuples
-        timeout: Maximum time in seconds for each simulation
-        
-    Returns:
-        List of (scenario_name, results) tuples
-    """
-    results = []
-    
-    for args in chunk_args:
-        try:
-            # Check memory before starting new simulation
-            if not check_memory_usage():
-                time.sleep(5)  # Wait if memory usage is high
-                continue
-                
-            # Run simulation with timeout
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-                future = executor.submit(simular_escenario, args)
-                try:
-                    result = future.result(timeout=timeout)
-                    results.append(result)
-                except concurrent.futures.TimeoutError:
-                    print(f"Simulation timed out for scenario {args[0]}")
-                    continue
-                except Exception as e:
-                    print(f"Error in simulation for scenario {args[0]}: {str(e)}")
-                    continue
-                    
-        except Exception as e:
-            print(f"Error processing chunk: {str(e)}")
-            continue
-            
-    return results
-
-
-def simular_escenarios_paralelo(params: CreditCardParams, num_years: int = 1, 
-                               num_procesos: Optional[int] = None,
-                               num_seeds: int = 1000) -> Dict[str, List[Dict[str, Any]]]:
-    """
-    Simula todos los escenarios en paralelo con múltiples semillas.
-    Now includes memory management, process limits, and error handling.
-    
-    Args:
-        params: Objeto CreditCardParams con los valores optimistas, neutrales y pesimistas
-        num_years: Número de años a simular
-        num_procesos: Número de procesos a utilizar (None = usar todos los disponibles)
-        num_seeds: Número de semillas aleatorias a simular
-        
-    Returns:
-        Diccionario con los resultados de cada escenario y semilla
-    """
-    escenarios = generar_escenarios(params)
-    all_args = []
-    
-    # Generate args for all scenarios and seeds
-    for nombre, params_escenario in escenarios:
-        for seed in range(num_seeds):
-            params_with_seed = params_escenario.copy()
-            params_with_seed['semilla_aleatoria'] = seed
-            all_args.append((nombre, params_with_seed, num_years))
-    
-    # Get safe number of processes
-    if num_procesos is None:
-        num_procesos = get_safe_process_count()
-    else:
-        num_procesos = min(num_procesos, get_safe_process_count())
-    
-    # Split args into chunks
-    chunks = [all_args[i:i + CHUNK_SIZE] for i in range(0, len(all_args), CHUNK_SIZE)]
-    
-    # Process chunks with progress bar
-    resultados = []
-    with tqdm(total=len(chunks), desc="Processing simulation chunks") as pbar:
-        with mp.Pool(processes=num_procesos) as pool:
-            for chunk_result in pool.imap_unordered(process_chunk, chunks):
-                resultados.extend(chunk_result)
-                pbar.update(1)
-                
-                # Check memory usage after each chunk
-                if not check_memory_usage():
-                    time.sleep(5)  # Wait if memory usage is high
-    
-    # Reorganize results by scenario
-    resultados_por_escenario = {}
-    for nombre, resultado in resultados:
-        if nombre not in resultados_por_escenario:
-            resultados_por_escenario[nombre] = []
-        resultados_por_escenario[nombre].append(resultado)
-    
-    return resultados_por_escenario
-
-
-def calcular_estadisticas_escenario(resultados_escenario: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Calcula estadísticas para un escenario basado en múltiples simulaciones.
-    
-    Args:
-        resultados_escenario: Lista de resultados para un escenario
-        
-    Returns:
-        Diccionario con estadísticas del escenario
-    """
-    # Extract key metrics
-    metricas = {
-        'ingresos_totales': [],
-        'gastos_totales': [],
-        'perdidas_totales': [],
-        'ganancia_neta': [],
-        'tasa_morosidad': [],
-        'clientes_activos_final': []
-    }
-    
-    for resultado in resultados_escenario:
-        for metrica in metricas:
-            metricas[metrica].append(resultado[metrica])
-    
-    # Calculate statistics
-    estadisticas = {}
-    for metrica, valores in metricas.items():
-        valores_np = np.array(valores)
-        estadisticas[metrica] = {
-            'mean': np.mean(valores_np),
-            'std': np.std(valores_np),
-            'min': np.min(valores_np),
-            'max': np.max(valores_np),
-            'median': np.median(valores_np),
-            'q25': np.percentile(valores_np, 25),
-            'q75': np.percentile(valores_np, 75),
-            'all_values': valores  # Keep all values for detailed analysis
-        }
-    
-    # Add parameters from first simulation (they're the same for all)
-    estadisticas['parametros'] = resultados_escenario[0]['parametros']
-    
-    # Calculate monthly statistics
-    monthly_stats = []
-    num_months = len(resultados_escenario[0]['resultados_mes'])
-    
-    for month in range(num_months):
-        month_data = {
-            'mes_global': resultados_escenario[0]['resultados_mes'][month]['mes_global'],
-            'anio': resultados_escenario[0]['resultados_mes'][month]['anio'],
-            'mes': resultados_escenario[0]['resultados_mes'][month]['mes'],
-            'ingresos_comisiones': [],
-            'ingresos_intereses': [],
-            'ingresos': [],
-            'gastos': [],
-            'perdidas': [],
-            'clientes_activos': [],
-            'clientes_morosos': []
-        }
-        
-        for resultado in resultados_escenario:
-            mes_actual = resultado['resultados_mes'][month]
-            for key in month_data.keys():
-                if key not in ['mes_global', 'anio', 'mes']:
-                    month_data[key].append(mes_actual[key])
-        
-        # Calculate statistics for each metric
-        month_stats = {
-            'mes_global': month_data['mes_global'],
-            'anio': month_data['anio'],
-            'mes': month_data['mes']
-        }
-        
-        for key, values in month_data.items():
-            if key not in ['mes_global', 'anio', 'mes']:
-                values_np = np.array(values)
-                month_stats[f'{key}_mean'] = np.mean(values_np)
-                month_stats[f'{key}_std'] = np.std(values_np)
-                month_stats[f'{key}_q25'] = np.percentile(values_np, 25)
-                month_stats[f'{key}_median'] = np.median(values_np)
-                month_stats[f'{key}_q75'] = np.percentile(values_np, 75)
-        
-        monthly_stats.append(month_stats)
-    
-    estadisticas['resultados_mes'] = monthly_stats
-    return estadisticas
-
-
-def _save_scenario_stats(args: Tuple[str, Dict, str, str]) -> None:
-    """
-    Helper function to save statistics for a single scenario.
-    
-    Args:
-        args: Tuple containing (scenario_name, stats, directory, timestamp)
-    """
-    scenario, stats, directorio, timestamp = args
-    
-    # Convert numpy types to native Python types for JSON serialization
-    stats_json = {}
-    for key, value in stats.items():
-        if key == 'resultados_mes':
-            stats_json[key] = value
-        elif key == 'parametros':
-            stats_json[key] = value
-        else:
-            stats_json[key] = {
-                k: v.tolist() if isinstance(v, np.ndarray) else (
-                    float(v) if isinstance(v, (np.float32, np.float64)) else (
-                        int(v) if isinstance(v, (np.int32, np.int64)) else v
-                    )
-                )
-                for k, v in value.items()
-            }
-    
-    # Save statistics JSON
-    with open(f"{directorio}/estadisticas_{scenario}_{timestamp}.json", 'w') as f:
-        json.dump(stats_json, f)
-    
-    # Save monthly results CSV
-    datos_mensuales = []
-    for mes in stats['resultados_mes']:
-        datos_mensuales.append({
-            'mes_global': int(mes['mes_global']),
-            'anio': int(mes['anio']),
-            'mes': int(mes['mes']),
-            'ingresos_comisiones_mean': float(mes['ingresos_comisiones_mean']),
-            'ingresos_comisiones_std': float(mes['ingresos_comisiones_std']),
-            'ingresos_intereses_mean': float(mes['ingresos_intereses_mean']),
-            'ingresos_intereses_std': float(mes['ingresos_intereses_std']),
-            'ingresos_mean': float(mes['ingresos_mean']),
-            'ingresos_std': float(mes['ingresos_std']),
-            'gastos_mean': float(mes['gastos_mean']),
-            'gastos_std': float(mes['gastos_std']),
-            'perdidas_mean': float(mes['perdidas_mean']),
-            'perdidas_std': float(mes['perdidas_std']),
-            'clientes_activos_mean': float(mes['clientes_activos_mean']),
-            'clientes_activos_std': float(mes['clientes_activos_std']),
-            'clientes_morosos_mean': float(mes['clientes_morosos_mean']),
-            'clientes_morosos_std': float(mes['clientes_morosos_std'])
-        })
-    
-    df_mensual = pd.DataFrame(datos_mensuales)
-    df_mensual.to_csv(f"{directorio}/resultados_mensuales_{scenario}_{timestamp}.csv", index=False)
-
-
-def guardar_resultados(resultados: Dict[str, List[Dict[str, Any]]], directorio: str) -> str:
-    """
-    Saves simulation results to a single comprehensive CSV file.
-    Now includes memory-efficient processing and error handling.
-    
-    Args:
-        resultados: Dictionary with results for each scenario and seed
-        directorio: Directory where to save the results
-        
-    Returns:
-        Path to the saved CSV file
-    """
-    # Create directory if it doesn't exist
-    if not os.path.exists(directorio):
-        os.makedirs(directorio)
-    
-    # Process results in chunks to manage memory
-    chunk_size = 1000
-    all_results = []
-    
-    # Process each scenario
-    for scenario, scenario_results in resultados.items():
-        # Process results in chunks
-        for i in range(0, len(scenario_results), chunk_size):
-            chunk = scenario_results[i:i + chunk_size]
-            
-            # Process chunk
-            chunk_results = []
-            for seed_index, result in enumerate(chunk, start=i):
-                try:
-                    # Add summary metrics
-                    summary_row = {
-                        'scenario': scenario,
-                        'seed': seed_index,
-                        'total_income': result['ingresos_totales'],
-                        'total_expenses': result['gastos_totales'],
-                        'total_losses': result['perdidas_totales'],
-                        'net_profit': result['ganancia_neta'],
-                        'delinquency_rate': result['tasa_morosidad'],
-                        'active_clients_final': result['clientes_activos_final'],
-                        'num_clients_initial': result['parametros']['num_clientes'],
-                        'simulation_type': 'summary'
-                    }
-                    chunk_results.append(summary_row)
-                    
-                    # Add monthly results
-                    for month_data in result['resultados_mes']:
-                        month_row = {
-                            'scenario': scenario,
-                            'seed': seed_index,
-                            'month': month_data['mes_global'],
-                            'year': month_data['anio'],
-                            'month_of_year': month_data['mes'],
-                            'commission_income': month_data['ingresos_comisiones'],
-                            'interest_income': month_data['ingresos_intereses'],
-                            'total_income': month_data['ingresos'],
-                            'expenses': month_data['gastos'],
-                            'losses': month_data['perdidas'],
-                            'net_profit': month_data['ingresos'] - month_data['gastos'] - month_data['perdidas'],
-                            'active_clients': month_data['clientes_activos'],
-                            'delinquent_clients': month_data['clientes_morosos'],
-                            'interes_generado_total': month_data['interes_generado_total'],
-                            'pagos_interes_total': month_data['pagos_interes_total'],
-                            'saldo_principal_total': month_data['saldo_principal_total'],
-                            'saldo_interes_total': month_data['saldo_interes_total'],
-                            'simulation_type': 'monthly'
-                        }
-                        chunk_results.append(month_row)
-                        
-                except Exception as e:
-                    print(f"Error processing result for scenario {scenario}, seed {seed_index}: {str(e)}")
-                    continue
-            
-            # Append chunk results
-            all_results.extend(chunk_results)
-            
-            # Check memory usage
-            if not check_memory_usage():
-                time.sleep(5)
-    
-    # Create DataFrame and save in chunks
-    results_df = pd.DataFrame(all_results)
-    
-    # Save to CSV with fixed name
-    csv_path = f"{directorio}/simulation_results.csv"
-    
-    # Save in chunks to manage memory
-    chunk_size = 100000
-    for i in range(0, len(results_df), chunk_size):
-        chunk = results_df[i:i + chunk_size]
-        if i == 0:
-            chunk.to_csv(csv_path, index=False)
-        else:
-            chunk.to_csv(csv_path, mode='a', header=False, index=False)
-    
-    print(f"Results saved to {csv_path}")
-    return csv_path
-
-
-def crear_visualizaciones_estadisticas(estadisticas: Dict[str, Dict[str, Any]], directorio: str, timestamp: str) -> None:
-    """
-    Crea visualizaciones estadísticas de los resultados.
-    
-    Args:
-        estadisticas: Diccionario con las estadísticas de cada escenario
-        directorio: Directorio donde guardar las visualizaciones
-        timestamp: Timestamp para los nombres de archivo
-    """
-    # Create directory for visualizations
-    vis_dir = f"{directorio}/visualizaciones_{timestamp}"
-    if not os.path.exists(vis_dir):
-        os.makedirs(vis_dir)
-    
-    # 1. Box plots of net profits by scenario
-    plt.figure(figsize=(12, 6))
-    data = []
-    labels = []
-    for escenario, stats in estadisticas.items():
-        data.append(stats['ganancia_neta']['all_values'])
-        labels.extend([escenario] * len(stats['ganancia_neta']['all_values']))
-    
-    plt.boxplot(data, labels=list(estadisticas.keys()))
-    plt.title('Distribución de Ganancias Netas por Escenario')
-    plt.xlabel('Escenario')
-    plt.ylabel('Ganancia Neta')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig(f"{vis_dir}/distribucion_ganancias.png")
-    plt.close()
-    
-    # 2. Monthly income evolution with confidence intervals
-    plt.figure(figsize=(15, 8))
-    
-    for escenario, stats in estadisticas.items():
-        meses = [mes['mes_global'] for mes in stats['resultados_mes']]
-        ingresos_mean = [mes['ingresos_mean'] for mes in stats['resultados_mes']]
-        ingresos_std = [mes['ingresos_std'] for mes in stats['resultados_mes']]
-        
-        plt.plot(meses, ingresos_mean, label=escenario)
-        plt.fill_between(meses, 
-                        [m - 2*s for m, s in zip(ingresos_mean, ingresos_std)],
-                        [m + 2*s for m, s in zip(ingresos_mean, ingresos_std)],
-                        alpha=0.2)
-    
-    plt.title('Evolución de Ingresos Mensuales con Intervalos de Confianza')
-    plt.xlabel('Mes')
-    plt.ylabel('Ingresos')
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(f"{vis_dir}/evolucion_ingresos.png")
-    plt.close()
-
-
 def ejemplo_uso():
-    """
-    Ejemplo de uso del modelo de simulación de cartera de tarjetas.
-    """
-    # Definir parámetros (optimista, neutral, pesimista)
+    """Example usage of the credit card portfolio simulation model."""
+    # Define parameters (optimistic, neutral, pessimistic)
     params = CreditCardParams(
         # Portfolio size
         num_clientes=(10000, 8000, 5000),
         
         # Customer behavior
-        perc_totaleros=(0.4, 0.3, 0.2),  # % of customers who pay in full
-        perc_morosidad=(0.01, 0.03, 0.05),  # % chance of delinquency per month
+        perc_totaleros=(0.4, 0.3, 0.2),
+        perc_morosidad=(0.01, 0.03, 0.05),
         
         # Credit line parameters
-        linea_credito_prom=(50000, 40000, 30000),  # Average credit line
+        linea_credito_prom=(50000, 40000, 30000),
         
         # Utilization parameters
-        util_credito_totaleros=(0.7, 0.6, 0.5),  # % utilization for full payers
-        # Beta distribution parameters calibrated to give ~33% mean utilization
+        util_credito_totaleros=(0.7, 0.6, 0.5),
         util_credito_revolventes_alpha=(2.0, 1.8, 1.5),
         util_credito_revolventes_beta=(4.0, 3.6, 3.0),
         
         # Payment parameters
-        pago_minimo_perc=(0.05, 0.05, 0.05),  # Minimum payment as % of balance
-        prob_pago_minimo=(0.7, 0.75, 0.8),  # Probability of paying only minimum
+        pago_minimo_perc=(0.05, 0.05, 0.05),
+        prob_pago_minimo=(0.7, 0.75, 0.8),
         
         # Financial parameters
-        tasa_interes=(36.0, 42.0, 48.0),  # Annual interest rate (%)
-        comision_venta=(0.03, 0.025, 0.02),  # Interchange fee (%)
-        costo_emision=(500, 600, 700),  # Cost per card (includes all operational costs)
+        tasa_interes=(36.0, 42.0, 48.0),
+        comision_venta=(0.03, 0.025, 0.02),
+        costo_emision=(500, 600, 700),
         
         # Simulation parameters
-        semilla_aleatoria=42  # Random seed for reproducibility
+        semilla_aleatoria=42
     )
     
-    # Simular escenarios en paralelo
+    # Run simulation
     num_years = 3
-    resultados = simular_escenarios_paralelo(params, num_years=num_years)
+    resultados = simular_escenarios_secuencial(params, num_years=num_years)
     
-    # Guardar resultados
-    guardar_resultados(resultados, "resultados_simulacion")
-    
-    # Mostrar resumen
-    print("\nResumen de resultados:")
-    for escenario, resultado in resultados.items():
-        print(f"\nEscenario: {escenario}")
-        print(f"Ingresos totales: ${resultado['ingresos_totales']:,.2f}")
-        print(f"Gastos totales: ${resultado['gastos_totales']:,.2f}")
-        print(f"Pérdidas por morosidad: ${resultado['perdidas_totales']:,.2f}")
-        print(f"Ganancia neta: ${resultado['ganancia_neta']:,.2f}")
-        print(f"Tasa de morosidad final: {resultado['tasa_morosidad']:.2%}")
-        print(f"Clientes activos al final: {resultado['clientes_activos_final']} de {params.get_scenario_params(escenario)['num_clientes']}")
-
+    # Show summary
+    print("\nSimulation completed. Check simulation.log for details.")
 
 if __name__ == "__main__":
     ejemplo_uso()
