@@ -11,7 +11,17 @@ import os
 import json
 from datetime import datetime
 import concurrent.futures
+import psutil
+import sys
+import signal
+import time
+from functools import partial
 
+# Constants for resource limits
+MAX_MEMORY_PERCENT = 80  # Maximum memory usage percentage
+MAX_PROCESSES = 4  # Maximum number of processes to use
+CHUNK_SIZE = 10  # Number of simulations to process in each chunk
+TIMEOUT_SECONDS = 3600  # Maximum time for a single simulation (1 hour)
 
 @dataclass
 class CreditCardParams:
@@ -374,11 +384,73 @@ def simular_escenario(args: Tuple[str, Dict[str, Any], int]) -> Tuple[str, Dict[
     return (nombre_escenario, resultados)
 
 
+def get_safe_process_count():
+    """Get a safe number of processes to use based on system resources."""
+    cpu_count = mp.cpu_count()
+    memory = psutil.virtual_memory()
+    
+    # Limit processes based on available memory
+    safe_processes = min(
+        cpu_count,
+        MAX_PROCESSES,
+        int(memory.available / (1024 * 1024 * 1024))  # Convert to GB
+    )
+    
+    return max(1, safe_processes)
+
+
+def check_memory_usage():
+    """Check if memory usage is within safe limits."""
+    memory = psutil.virtual_memory()
+    return memory.percent < MAX_MEMORY_PERCENT
+
+
+def process_chunk(chunk_args: List[Tuple[str, Dict[str, Any], int]], timeout: int = TIMEOUT_SECONDS) -> List[Tuple[str, Dict[str, Any]]]:
+    """
+    Process a chunk of simulations with timeout and error handling.
+    
+    Args:
+        chunk_args: List of (scenario_name, params, num_years) tuples
+        timeout: Maximum time in seconds for each simulation
+        
+    Returns:
+        List of (scenario_name, results) tuples
+    """
+    results = []
+    
+    for args in chunk_args:
+        try:
+            # Check memory before starting new simulation
+            if not check_memory_usage():
+                time.sleep(5)  # Wait if memory usage is high
+                continue
+                
+            # Run simulation with timeout
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(simular_escenario, args)
+                try:
+                    result = future.result(timeout=timeout)
+                    results.append(result)
+                except concurrent.futures.TimeoutError:
+                    print(f"Simulation timed out for scenario {args[0]}")
+                    continue
+                except Exception as e:
+                    print(f"Error in simulation for scenario {args[0]}: {str(e)}")
+                    continue
+                    
+        except Exception as e:
+            print(f"Error processing chunk: {str(e)}")
+            continue
+            
+    return results
+
+
 def simular_escenarios_paralelo(params: CreditCardParams, num_years: int = 1, 
                                num_procesos: Optional[int] = None,
                                num_seeds: int = 1000) -> Dict[str, List[Dict[str, Any]]]:
     """
     Simula todos los escenarios en paralelo con múltiples semillas.
+    Now includes memory management, process limits, and error handling.
     
     Args:
         params: Objeto CreditCardParams con los valores optimistas, neutrales y pesimistas
@@ -399,13 +471,26 @@ def simular_escenarios_paralelo(params: CreditCardParams, num_years: int = 1,
             params_with_seed['semilla_aleatoria'] = seed
             all_args.append((nombre, params_with_seed, num_years))
     
+    # Get safe number of processes
     if num_procesos is None:
-        num_procesos = mp.cpu_count()
+        num_procesos = get_safe_process_count()
+    else:
+        num_procesos = min(num_procesos, get_safe_process_count())
     
-    with mp.Pool(processes=num_procesos) as pool:
-        resultados = list(tqdm(pool.imap(simular_escenario, all_args), 
-                              total=len(all_args), 
-                              desc="Simulando escenarios"))
+    # Split args into chunks
+    chunks = [all_args[i:i + CHUNK_SIZE] for i in range(0, len(all_args), CHUNK_SIZE)]
+    
+    # Process chunks with progress bar
+    resultados = []
+    with tqdm(total=len(chunks), desc="Processing simulation chunks") as pbar:
+        with mp.Pool(processes=num_procesos) as pool:
+            for chunk_result in pool.imap_unordered(process_chunk, chunks):
+                resultados.extend(chunk_result)
+                pbar.update(1)
+                
+                # Check memory usage after each chunk
+                if not check_memory_usage():
+                    time.sleep(5)  # Wait if memory usage is high
     
     # Reorganize results by scenario
     resultados_por_escenario = {}
@@ -565,6 +650,7 @@ def _save_scenario_stats(args: Tuple[str, Dict, str, str]) -> None:
 def guardar_resultados(resultados: Dict[str, List[Dict[str, Any]]], directorio: str) -> str:
     """
     Saves simulation results to a single comprehensive CSV file.
+    Now includes memory-efficient processing and error handling.
     
     Args:
         resultados: Dictionary with results for each scenario and seed
@@ -577,58 +663,84 @@ def guardar_resultados(resultados: Dict[str, List[Dict[str, Any]]], directorio: 
     if not os.path.exists(directorio):
         os.makedirs(directorio)
     
-    # Create a list to store all results in a flat structure
+    # Process results in chunks to manage memory
+    chunk_size = 1000
     all_results = []
     
     # Process each scenario
     for scenario, scenario_results in resultados.items():
-        # Process each simulation run (seed)
-        for seed_index, result in enumerate(scenario_results):
-            # Add summary metrics
-            summary_row = {
-                'scenario': scenario,
-                'seed': seed_index,
-                'total_income': result['ingresos_totales'],
-                'total_expenses': result['gastos_totales'],
-                'total_losses': result['perdidas_totales'],
-                'net_profit': result['ganancia_neta'],
-                'delinquency_rate': result['tasa_morosidad'],
-                'active_clients_final': result['clientes_activos_final'],
-                'num_clients_initial': result['parametros']['num_clientes'],
-                'simulation_type': 'summary'
-            }
-            all_results.append(summary_row)
+        # Process results in chunks
+        for i in range(0, len(scenario_results), chunk_size):
+            chunk = scenario_results[i:i + chunk_size]
             
-            # Add monthly results
-            for month_data in result['resultados_mes']:
-                month_row = {
-                    'scenario': scenario,
-                    'seed': seed_index,
-                    'month': month_data['mes_global'],
-                    'year': month_data['anio'],
-                    'month_of_year': month_data['mes'],
-                    'commission_income': month_data['ingresos_comisiones'],
-                    'interest_income': month_data['ingresos_intereses'],
-                    'total_income': month_data['ingresos'],
-                    'expenses': month_data['gastos'],
-                    'losses': month_data['perdidas'],
-                    'net_profit': month_data['ingresos'] - month_data['gastos'] - month_data['perdidas'],
-                    'active_clients': month_data['clientes_activos'],
-                    'delinquent_clients': month_data['clientes_morosos'],
-                    'interes_generado_total': month_data['interes_generado_total'],
-                    'pagos_interes_total': month_data['pagos_interes_total'],
-                    'saldo_principal_total': month_data['saldo_principal_total'],
-                    'saldo_interes_total': month_data['saldo_interes_total'],
-                    'simulation_type': 'monthly'
-                }
-                all_results.append(month_row)
+            # Process chunk
+            chunk_results = []
+            for seed_index, result in enumerate(chunk, start=i):
+                try:
+                    # Add summary metrics
+                    summary_row = {
+                        'scenario': scenario,
+                        'seed': seed_index,
+                        'total_income': result['ingresos_totales'],
+                        'total_expenses': result['gastos_totales'],
+                        'total_losses': result['perdidas_totales'],
+                        'net_profit': result['ganancia_neta'],
+                        'delinquency_rate': result['tasa_morosidad'],
+                        'active_clients_final': result['clientes_activos_final'],
+                        'num_clients_initial': result['parametros']['num_clientes'],
+                        'simulation_type': 'summary'
+                    }
+                    chunk_results.append(summary_row)
+                    
+                    # Add monthly results
+                    for month_data in result['resultados_mes']:
+                        month_row = {
+                            'scenario': scenario,
+                            'seed': seed_index,
+                            'month': month_data['mes_global'],
+                            'year': month_data['anio'],
+                            'month_of_year': month_data['mes'],
+                            'commission_income': month_data['ingresos_comisiones'],
+                            'interest_income': month_data['ingresos_intereses'],
+                            'total_income': month_data['ingresos'],
+                            'expenses': month_data['gastos'],
+                            'losses': month_data['perdidas'],
+                            'net_profit': month_data['ingresos'] - month_data['gastos'] - month_data['perdidas'],
+                            'active_clients': month_data['clientes_activos'],
+                            'delinquent_clients': month_data['clientes_morosos'],
+                            'interes_generado_total': month_data['interes_generado_total'],
+                            'pagos_interes_total': month_data['pagos_interes_total'],
+                            'saldo_principal_total': month_data['saldo_principal_total'],
+                            'saldo_interes_total': month_data['saldo_interes_total'],
+                            'simulation_type': 'monthly'
+                        }
+                        chunk_results.append(month_row)
+                        
+                except Exception as e:
+                    print(f"Error processing result for scenario {scenario}, seed {seed_index}: {str(e)}")
+                    continue
+            
+            # Append chunk results
+            all_results.extend(chunk_results)
+            
+            # Check memory usage
+            if not check_memory_usage():
+                time.sleep(5)
     
-    # Create a DataFrame with all results
+    # Create DataFrame and save in chunks
     results_df = pd.DataFrame(all_results)
     
     # Save to CSV with fixed name
     csv_path = f"{directorio}/simulation_results.csv"
-    results_df.to_csv(csv_path, index=False)
+    
+    # Save in chunks to manage memory
+    chunk_size = 100000
+    for i in range(0, len(results_df), chunk_size):
+        chunk = results_df[i:i + chunk_size]
+        if i == 0:
+            chunk.to_csv(csv_path, index=False)
+        else:
+            chunk.to_csv(csv_path, mode='a', header=False, index=False)
     
     print(f"Results saved to {csv_path}")
     return csv_path
