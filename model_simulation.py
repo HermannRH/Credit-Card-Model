@@ -57,6 +57,7 @@ class CreditCardParams:
     
     # Simulation parameters
     semilla_aleatoria: int  # Random seed for reproducibility
+    start_up_time: int  # Number of months to reach full customer base
 
     def get_scenario_params(self, scenario: str) -> Dict[str, Any]:
         """Get parameter values for a specific scenario."""
@@ -329,8 +330,8 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
     gastos_totales = params['num_clientes'] * params['costo_emision'] * 12 * num_years
     perdidas_totales = 0
     
-    # Crear clientes
-    clientes = []
+    # Crear lista de clientes (todos los clientes potenciales)
+    clientes_potenciales = []
     for i in range(params['num_clientes']):
         es_totalero = random.random() < params['perc_totaleros']
         linea_credito = params['linea_credito_prom']
@@ -343,7 +344,7 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
             'saldo_interes': 0,    # Interest balance
             'linea_disponible': linea_credito
         }
-        clientes.append(cliente)
+        clientes_potenciales.append(cliente)
     
     # Simulación mes a mes
     for year in range(num_years):
@@ -352,8 +353,20 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
             mes_del_anio = month + 1
             factor_estacional = seasonality_factors[month]
             
+            # Determinar cuántos clientes activos hay en este mes
+            if mes_global <= params['start_up_time']:
+                # Durante el período de inicio, agregar clientes gradualmente
+                # Calcular cuántos clientes deberían estar activos en este mes
+                clientes_por_mes = params['num_clientes'] / params['start_up_time']
+                num_clientes_activos = int(round(clientes_por_mes * mes_global))
+            else:
+                num_clientes_activos = params['num_clientes']
+            
+            # Seleccionar los clientes activos para este mes
+            clientes = clientes_potenciales[:num_clientes_activos]
+            
             ingresos_mes = 0
-            gastos_mes = params['num_clientes'] * params['costo_emision'] / 12
+            gastos_mes = num_clientes_activos * params['costo_emision'] / 12
             perdidas_mes = 0
             
             detalles_mes = {
@@ -366,7 +379,8 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
                 'gastos': gastos_mes,
                 'perdidas': 0,
                 'clientes_activos': 0,
-                'clientes_morosos': 0
+                'clientes_morosos': 0,
+                'clientes_totales': num_clientes_activos  # Agregar número total de clientes en este mes
             }
             
             # Simular cada cliente
@@ -538,45 +552,3 @@ def simular_cartera(params: Dict[str, Any], num_years: int = 1) -> Dict[str, Any
         'clientes_activos_final': clientes_activos_final,
         'parametros': params
     }
-
-def ejemplo_uso():
-    """Example usage of the credit card portfolio simulation model."""
-    # Define parameters (optimistic, neutral, pessimistic)
-    params = CreditCardParams(
-        # Portfolio size
-        num_clientes=(10000, 8000, 5000),
-        
-        # Customer behavior
-        perc_totaleros=(0.4, 0.3, 0.2),
-        perc_morosidad=(0.01, 0.03, 0.05),
-        
-        # Credit line parameters
-        linea_credito_prom=(50000, 40000, 30000),
-        
-        # Utilization parameters
-        util_credito_totaleros=(0.7, 0.6, 0.5),
-        util_credito_revolventes_alpha=(2.0, 1.8, 1.5),
-        util_credito_revolventes_beta=(4.0, 3.6, 3.0),
-        
-        # Payment parameters
-        pago_minimo_perc=(0.05, 0.05, 0.05),
-        prob_pago_minimo=(0.7, 0.75, 0.8),
-        
-        # Financial parameters
-        tasa_interes=(36.0, 42.0, 48.0),
-        comision_venta=(0.03, 0.025, 0.02),
-        costo_emision=(500, 600, 700),
-        
-        # Simulation parameters
-        semilla_aleatoria=42
-    )
-    
-    # Run simulation
-    num_years = 3
-    resultados = simular_escenarios_secuencial(params, num_years=num_years)
-    
-    # Show summary
-    print("\nSimulation completed. Check simulation.log for details.")
-
-if __name__ == "__main__":
-    ejemplo_uso()

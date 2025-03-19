@@ -363,6 +363,8 @@ costo_emision_pes = st.sidebar.number_input("Pessimistic Cost per Card", min_val
 st.sidebar.markdown('<div class="subsection-header">Simulation Parameters</div>', unsafe_allow_html=True)
 num_years = st.sidebar.slider("Number of Years to Simulate", min_value=1, max_value=10, value=3, step=1)
 num_seeds = st.sidebar.number_input("Number of Seeds", min_value=1, max_value=10000, value=100, step=50)
+start_up_time = st.sidebar.slider("Start-Up Time (months)", min_value=1, max_value=36, value=12, step=1, 
+                                 help="Number of months to reach full customer base. In month 1, 50% of customers are added. The remaining 50% are added in month 2.")
 
 # Create parameter object
 params = CreditCardParams(
@@ -390,8 +392,9 @@ params = CreditCardParams(
     comision_venta=(comision_venta_opt, comision_venta_neut, comision_venta_pes),
     costo_emision=(costo_emision_opt, costo_emision_neut, costo_emision_pes),
     
-    # No random seed parameter needed
-    semilla_aleatoria=0  # This will be overridden by the simulation
+    # Simulation parameters
+    semilla_aleatoria=0,  # This will be overridden by the simulation
+    start_up_time=start_up_time  # Add start-up time parameter
 )
 
 # Run simulation button
