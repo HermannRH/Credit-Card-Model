@@ -6622,3 +6622,1107 @@
 2025-03-18 17:55:16,747 - INFO - Saved batch 100 to resultados_simulacion/simulation_results_batch_100.csv
 2025-03-18 17:55:17,229 - INFO - Successfully combined all results into resultados_simulacion/simulation_results.csv
 2025-03-18 17:55:17,253 - INFO - Simulation completed successfully
+2025-03-18 17:56:53,021 - INFO - Starting sequential simulation
+2025-03-18 17:56:53,022 - INFO - Total simulations to run: 500
+2025-03-18 17:56:53,024 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,026 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,027 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,031 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,032 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,036 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,036 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,039 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,040 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,042 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,050 - INFO - Saved batch 1 to resultados_simulacion/simulation_results_batch_1.csv
+2025-03-18 17:56:53,185 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,190 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,191 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,195 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,195 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,197 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,198 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,200 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,201 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,203 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,211 - INFO - Saved batch 2 to resultados_simulacion/simulation_results_batch_2.csv
+2025-03-18 17:56:53,320 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,323 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,324 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,327 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,327 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,329 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,329 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,332 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,332 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,335 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,339 - INFO - Saved batch 3 to resultados_simulacion/simulation_results_batch_3.csv
+2025-03-18 17:56:53,400 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,402 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,403 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,405 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,406 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,408 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,408 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,411 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,411 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,413 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,417 - INFO - Saved batch 4 to resultados_simulacion/simulation_results_batch_4.csv
+2025-03-18 17:56:53,481 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,484 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,485 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,487 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,487 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,490 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,490 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,492 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,492 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,494 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,499 - INFO - Saved batch 5 to resultados_simulacion/simulation_results_batch_5.csv
+2025-03-18 17:56:53,562 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,565 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,566 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,569 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,569 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,571 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,572 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,574 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,574 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,576 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,581 - INFO - Saved batch 6 to resultados_simulacion/simulation_results_batch_6.csv
+2025-03-18 17:56:53,642 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,644 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,645 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,647 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,648 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,650 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,650 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,653 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,653 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,656 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,660 - INFO - Saved batch 7 to resultados_simulacion/simulation_results_batch_7.csv
+2025-03-18 17:56:53,722 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,724 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,725 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,727 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,727 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,730 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,730 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,732 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,733 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,735 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,740 - INFO - Saved batch 8 to resultados_simulacion/simulation_results_batch_8.csv
+2025-03-18 17:56:53,798 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,802 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,803 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,805 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,806 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,808 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,809 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,810 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,812 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,814 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,818 - INFO - Saved batch 9 to resultados_simulacion/simulation_results_batch_9.csv
+2025-03-18 17:56:53,876 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,879 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,879 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,881 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,882 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,884 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,884 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,886 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,887 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,889 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,894 - INFO - Saved batch 10 to resultados_simulacion/simulation_results_batch_10.csv
+2025-03-18 17:56:53,952 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,955 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,956 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,958 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,960 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,961 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,962 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,964 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,964 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:53,966 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:53,971 - INFO - Saved batch 11 to resultados_simulacion/simulation_results_batch_11.csv
+2025-03-18 17:56:54,023 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,023 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,023 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,023 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,023 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,037 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,038 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,039 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,039 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,042 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,045 - INFO - Saved batch 12 to resultados_simulacion/simulation_results_batch_12.csv
+2025-03-18 17:56:54,096 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,105 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,105 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,105 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,105 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,111 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,111 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,112 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,112 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,116 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,121 - INFO - Saved batch 13 to resultados_simulacion/simulation_results_batch_13.csv
+2025-03-18 17:56:54,172 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,172 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,172 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,182 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,182 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,185 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,185 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,188 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,189 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,191 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,196 - INFO - Saved batch 14 to resultados_simulacion/simulation_results_batch_14.csv
+2025-03-18 17:56:54,254 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,256 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,256 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,259 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,259 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,263 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,263 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,265 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,265 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,268 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,273 - INFO - Saved batch 15 to resultados_simulacion/simulation_results_batch_15.csv
+2025-03-18 17:56:54,324 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,324 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,324 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,324 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,324 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,336 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,337 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,339 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,339 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,341 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,344 - INFO - Saved batch 16 to resultados_simulacion/simulation_results_batch_16.csv
+2025-03-18 17:56:54,400 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,404 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,405 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,405 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,405 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,410 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,410 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,410 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,410 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,415 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,420 - INFO - Saved batch 17 to resultados_simulacion/simulation_results_batch_17.csv
+2025-03-18 17:56:54,472 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,472 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,472 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,472 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,472 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,484 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,484 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,485 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,485 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,489 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,492 - INFO - Saved batch 18 to resultados_simulacion/simulation_results_batch_18.csv
+2025-03-18 17:56:54,545 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,545 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,552 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,554 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,554 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,554 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,554 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,560 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,560 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,563 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,567 - INFO - Saved batch 19 to resultados_simulacion/simulation_results_batch_19.csv
+2025-03-18 17:56:54,623 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,623 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,623 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,623 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,623 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,632 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,632 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,634 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,634 - INFO - Starting simulation for scenario: optimistic
+2025-03-18 17:56:54,637 - INFO - Successfully completed simulation for scenario: optimistic
+2025-03-18 17:56:54,641 - INFO - Saved batch 20 to resultados_simulacion/simulation_results_batch_20.csv
+2025-03-18 17:56:54,699 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,699 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,699 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,703 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,705 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,706 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,706 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,709 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,709 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,712 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,712 - INFO - Saved batch 21 to resultados_simulacion/simulation_results_batch_21.csv
+2025-03-18 17:56:54,771 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,771 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,771 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,771 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,771 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,781 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,782 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,784 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,784 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,787 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,789 - INFO - Saved batch 22 to resultados_simulacion/simulation_results_batch_22.csv
+2025-03-18 17:56:54,848 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,848 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,848 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,854 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,854 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,856 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,856 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,859 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,859 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,861 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,865 - INFO - Saved batch 23 to resultados_simulacion/simulation_results_batch_23.csv
+2025-03-18 17:56:54,922 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,922 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,935 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,935 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:54,936 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:54,941 - INFO - Saved batch 24 to resultados_simulacion/simulation_results_batch_24.csv
+2025-03-18 17:56:55,000 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,002 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,002 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,003 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,005 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,007 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,008 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,010 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,010 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,012 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,012 - INFO - Saved batch 25 to resultados_simulacion/simulation_results_batch_25.csv
+2025-03-18 17:56:55,071 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,075 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,075 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,077 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,078 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,080 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,080 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,084 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,084 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,085 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,088 - INFO - Saved batch 26 to resultados_simulacion/simulation_results_batch_26.csv
+2025-03-18 17:56:55,143 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,147 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,147 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,152 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,152 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,153 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,153 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,153 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,153 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,160 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,160 - INFO - Saved batch 27 to resultados_simulacion/simulation_results_batch_27.csv
+2025-03-18 17:56:55,219 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,220 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,220 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,220 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,220 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,226 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,226 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,229 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,229 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,231 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,234 - INFO - Saved batch 28 to resultados_simulacion/simulation_results_batch_28.csv
+2025-03-18 17:56:55,288 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,288 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,288 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,297 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,297 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,301 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,302 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,304 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,304 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,306 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,308 - INFO - Saved batch 29 to resultados_simulacion/simulation_results_batch_29.csv
+2025-03-18 17:56:55,365 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,369 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,369 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,371 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,371 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,373 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,373 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,376 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,376 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,378 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,382 - INFO - Saved batch 30 to resultados_simulacion/simulation_results_batch_30.csv
+2025-03-18 17:56:55,452 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,453 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,461 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,461 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,464 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,467 - INFO - Saved batch 31 to resultados_simulacion/simulation_results_batch_31.csv
+2025-03-18 17:56:55,522 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,522 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,522 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,531 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,531 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,533 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,533 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,533 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,533 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,539 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,541 - INFO - Saved batch 32 to resultados_simulacion/simulation_results_batch_32.csv
+2025-03-18 17:56:55,589 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,602 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,602 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,604 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,604 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,604 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,604 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,611 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,611 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,613 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,616 - INFO - Saved batch 33 to resultados_simulacion/simulation_results_batch_33.csv
+2025-03-18 17:56:55,670 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,675 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,675 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,677 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,677 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,677 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,677 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,683 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,684 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,686 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,687 - INFO - Saved batch 34 to resultados_simulacion/simulation_results_batch_34.csv
+2025-03-18 17:56:55,743 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,748 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,748 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,751 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,751 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,753 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,753 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,756 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,756 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,757 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,763 - INFO - Saved batch 35 to resultados_simulacion/simulation_results_batch_35.csv
+2025-03-18 17:56:55,818 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,820 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,820 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,823 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,823 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,827 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,827 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,828 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,829 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,831 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,836 - INFO - Saved batch 36 to resultados_simulacion/simulation_results_batch_36.csv
+2025-03-18 17:56:55,890 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,898 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,898 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,901 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,901 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,903 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,903 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,906 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,907 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,907 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,910 - INFO - Saved batch 37 to resultados_simulacion/simulation_results_batch_37.csv
+2025-03-18 17:56:55,968 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,972 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,972 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,972 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,977 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,979 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,979 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,981 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,982 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:55,983 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:55,987 - INFO - Saved batch 38 to resultados_simulacion/simulation_results_batch_38.csv
+2025-03-18 17:56:56,046 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,049 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,050 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,051 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,053 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,054 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,056 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,057 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,057 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,059 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,064 - INFO - Saved batch 39 to resultados_simulacion/simulation_results_batch_39.csv
+2025-03-18 17:56:56,119 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,121 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,122 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,125 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,125 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,127 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,128 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,129 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,130 - INFO - Starting simulation for scenario: opt_neut
+2025-03-18 17:56:56,133 - INFO - Successfully completed simulation for scenario: opt_neut
+2025-03-18 17:56:56,138 - INFO - Saved batch 40 to resultados_simulacion/simulation_results_batch_40.csv
+2025-03-18 17:56:56,193 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,196 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,198 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,199 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,200 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,202 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,203 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,205 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,206 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,208 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,212 - INFO - Saved batch 41 to resultados_simulacion/simulation_results_batch_41.csv
+2025-03-18 17:56:56,268 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,271 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,271 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,273 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,275 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,276 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,277 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,279 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,279 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,280 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,285 - INFO - Saved batch 42 to resultados_simulacion/simulation_results_batch_42.csv
+2025-03-18 17:56:56,340 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,343 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,344 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,346 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,347 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,349 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,350 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,352 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,352 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,354 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,359 - INFO - Saved batch 43 to resultados_simulacion/simulation_results_batch_43.csv
+2025-03-18 17:56:56,415 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,417 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,418 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,420 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,421 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,422 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,422 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,424 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,424 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,427 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,431 - INFO - Saved batch 44 to resultados_simulacion/simulation_results_batch_44.csv
+2025-03-18 17:56:56,488 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,490 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,490 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,493 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,493 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,495 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,496 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,497 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,497 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,499 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,504 - INFO - Saved batch 45 to resultados_simulacion/simulation_results_batch_45.csv
+2025-03-18 17:56:56,560 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,563 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,564 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,566 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,566 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,569 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,569 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,571 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,572 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,573 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,578 - INFO - Saved batch 46 to resultados_simulacion/simulation_results_batch_46.csv
+2025-03-18 17:56:56,633 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,635 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,637 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,639 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,639 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,641 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,641 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,643 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,644 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,646 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,650 - INFO - Saved batch 47 to resultados_simulacion/simulation_results_batch_47.csv
+2025-03-18 17:56:56,707 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,709 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,710 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,712 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,713 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,715 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,715 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,716 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,716 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,718 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,723 - INFO - Saved batch 48 to resultados_simulacion/simulation_results_batch_48.csv
+2025-03-18 17:56:56,781 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,783 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,784 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,787 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,787 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,789 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,789 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,791 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,792 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,794 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,798 - INFO - Saved batch 49 to resultados_simulacion/simulation_results_batch_49.csv
+2025-03-18 17:56:56,853 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,855 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,855 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,856 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,858 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,860 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,861 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,862 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,862 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,865 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,868 - INFO - Saved batch 50 to resultados_simulacion/simulation_results_batch_50.csv
+2025-03-18 17:56:56,924 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,926 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,927 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,930 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,930 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,932 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,932 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,935 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,935 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:56,937 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:56,941 - INFO - Saved batch 51 to resultados_simulacion/simulation_results_batch_51.csv
+2025-03-18 17:56:56,998 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,002 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,003 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,005 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,005 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,007 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,008 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,009 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,010 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,011 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,016 - INFO - Saved batch 52 to resultados_simulacion/simulation_results_batch_52.csv
+2025-03-18 17:56:57,074 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,076 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,078 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,080 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,080 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,082 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,082 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,084 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,084 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,086 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,091 - INFO - Saved batch 53 to resultados_simulacion/simulation_results_batch_53.csv
+2025-03-18 17:56:57,148 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,151 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,152 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,154 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,154 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,156 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,157 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,159 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,159 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,161 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,165 - INFO - Saved batch 54 to resultados_simulacion/simulation_results_batch_54.csv
+2025-03-18 17:56:57,219 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,221 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,222 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,225 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,226 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,227 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,228 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,229 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,231 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,232 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,236 - INFO - Saved batch 55 to resultados_simulacion/simulation_results_batch_55.csv
+2025-03-18 17:56:57,292 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,294 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,295 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,297 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,298 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,300 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,300 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,302 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,304 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,305 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,309 - INFO - Saved batch 56 to resultados_simulacion/simulation_results_batch_56.csv
+2025-03-18 17:56:57,365 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,368 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,368 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,371 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,371 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,373 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,373 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,375 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,376 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,378 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,382 - INFO - Saved batch 57 to resultados_simulacion/simulation_results_batch_57.csv
+2025-03-18 17:56:57,438 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,440 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,440 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,442 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,442 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,445 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,445 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,447 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,448 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,449 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,454 - INFO - Saved batch 58 to resultados_simulacion/simulation_results_batch_58.csv
+2025-03-18 17:56:57,510 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,512 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,513 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,515 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,516 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,517 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,517 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,520 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,520 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,522 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,527 - INFO - Saved batch 59 to resultados_simulacion/simulation_results_batch_59.csv
+2025-03-18 17:56:57,582 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,585 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,586 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,588 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,588 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,589 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,590 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,592 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,592 - INFO - Starting simulation for scenario: neutral
+2025-03-18 17:56:57,594 - INFO - Successfully completed simulation for scenario: neutral
+2025-03-18 17:56:57,598 - INFO - Saved batch 60 to resultados_simulacion/simulation_results_batch_60.csv
+2025-03-18 17:56:57,657 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,659 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,660 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,662 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,662 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,664 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,664 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,666 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,667 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,669 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,673 - INFO - Saved batch 61 to resultados_simulacion/simulation_results_batch_61.csv
+2025-03-18 17:56:57,731 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,733 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,733 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,735 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,735 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,737 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,737 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,739 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,740 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,741 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,745 - INFO - Saved batch 62 to resultados_simulacion/simulation_results_batch_62.csv
+2025-03-18 17:56:57,800 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,802 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,803 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,805 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,806 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,807 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,807 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,810 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,810 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,812 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,816 - INFO - Saved batch 63 to resultados_simulacion/simulation_results_batch_63.csv
+2025-03-18 17:56:57,872 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,875 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,875 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,877 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,878 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,880 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,880 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,882 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,882 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,884 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,889 - INFO - Saved batch 64 to resultados_simulacion/simulation_results_batch_64.csv
+2025-03-18 17:56:57,945 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,947 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,948 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,950 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,951 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,953 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,953 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,955 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,955 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:57,958 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:57,962 - INFO - Saved batch 65 to resultados_simulacion/simulation_results_batch_65.csv
+2025-03-18 17:56:58,017 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,020 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,020 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,022 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,022 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,025 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,025 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,027 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,031 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,034 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,039 - INFO - Saved batch 66 to resultados_simulacion/simulation_results_batch_66.csv
+2025-03-18 17:56:58,104 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,107 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,107 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,109 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,110 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,112 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,112 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,114 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,115 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,117 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,122 - INFO - Saved batch 67 to resultados_simulacion/simulation_results_batch_67.csv
+2025-03-18 17:56:58,178 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,180 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,181 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,182 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,182 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,184 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,185 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,187 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,187 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,189 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,194 - INFO - Saved batch 68 to resultados_simulacion/simulation_results_batch_68.csv
+2025-03-18 17:56:58,252 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,254 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,255 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,257 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,257 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,259 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,259 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,261 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,262 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,263 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,267 - INFO - Saved batch 69 to resultados_simulacion/simulation_results_batch_69.csv
+2025-03-18 17:56:58,324 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,326 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,327 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,329 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,329 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,332 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,332 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,333 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,334 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,336 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,341 - INFO - Saved batch 70 to resultados_simulacion/simulation_results_batch_70.csv
+2025-03-18 17:56:58,396 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,398 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,399 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,401 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,401 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,403 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,404 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,406 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,406 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,409 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,413 - INFO - Saved batch 71 to resultados_simulacion/simulation_results_batch_71.csv
+2025-03-18 17:56:58,468 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,470 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,471 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,473 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,473 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,475 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,475 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,477 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,477 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,480 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,484 - INFO - Saved batch 72 to resultados_simulacion/simulation_results_batch_72.csv
+2025-03-18 17:56:58,541 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,543 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,544 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,546 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,546 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,547 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,547 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,550 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,551 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,552 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,557 - INFO - Saved batch 73 to resultados_simulacion/simulation_results_batch_73.csv
+2025-03-18 17:56:58,613 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,615 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,615 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,617 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,617 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,619 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,620 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,621 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,622 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,624 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,628 - INFO - Saved batch 74 to resultados_simulacion/simulation_results_batch_74.csv
+2025-03-18 17:56:58,684 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,686 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,687 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,689 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,689 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,691 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,692 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,693 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,693 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,696 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,700 - INFO - Saved batch 75 to resultados_simulacion/simulation_results_batch_75.csv
+2025-03-18 17:56:58,757 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,759 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,759 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,761 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,761 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,764 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,764 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,766 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,766 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,768 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,773 - INFO - Saved batch 76 to resultados_simulacion/simulation_results_batch_76.csv
+2025-03-18 17:56:58,832 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,834 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,835 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,838 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,838 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,840 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,840 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,842 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,842 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,845 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,849 - INFO - Saved batch 77 to resultados_simulacion/simulation_results_batch_77.csv
+2025-03-18 17:56:58,909 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,912 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,912 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,914 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,914 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,916 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,917 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,919 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,919 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,921 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,926 - INFO - Saved batch 78 to resultados_simulacion/simulation_results_batch_78.csv
+2025-03-18 17:56:58,984 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,987 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,988 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,990 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,990 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,992 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,992 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,995 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:58,995 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:58,997 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,002 - INFO - Saved batch 79 to resultados_simulacion/simulation_results_batch_79.csv
+2025-03-18 17:56:59,057 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:59,061 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,062 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:59,064 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,064 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:59,066 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,066 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:59,069 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,069 - INFO - Starting simulation for scenario: pes_neut
+2025-03-18 17:56:59,071 - INFO - Successfully completed simulation for scenario: pes_neut
+2025-03-18 17:56:59,075 - INFO - Saved batch 80 to resultados_simulacion/simulation_results_batch_80.csv
+2025-03-18 17:56:59,131 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,133 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,134 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,135 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,136 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,137 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,138 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,140 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,140 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,142 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,147 - INFO - Saved batch 81 to resultados_simulacion/simulation_results_batch_81.csv
+2025-03-18 17:56:59,204 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,205 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,206 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,208 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,208 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,210 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,211 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,212 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,213 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,215 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,220 - INFO - Saved batch 82 to resultados_simulacion/simulation_results_batch_82.csv
+2025-03-18 17:56:59,276 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,278 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,279 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,282 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,282 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,284 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,284 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,286 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,286 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,288 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,292 - INFO - Saved batch 83 to resultados_simulacion/simulation_results_batch_83.csv
+2025-03-18 17:56:59,349 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,351 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,352 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,353 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,353 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,356 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,356 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,358 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,358 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,360 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,365 - INFO - Saved batch 84 to resultados_simulacion/simulation_results_batch_84.csv
+2025-03-18 17:56:59,422 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,425 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,425 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,429 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,429 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,431 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,431 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,433 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,434 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,435 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,440 - INFO - Saved batch 85 to resultados_simulacion/simulation_results_batch_85.csv
+2025-03-18 17:56:59,495 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,498 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,500 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,501 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,502 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,504 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,504 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,506 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,506 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,508 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,512 - INFO - Saved batch 86 to resultados_simulacion/simulation_results_batch_86.csv
+2025-03-18 17:56:59,568 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,570 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,571 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,573 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,573 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,576 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,576 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,578 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,578 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,580 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,584 - INFO - Saved batch 87 to resultados_simulacion/simulation_results_batch_87.csv
+2025-03-18 17:56:59,642 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,644 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,645 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,646 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,647 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,649 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,650 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,652 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,652 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,654 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,658 - INFO - Saved batch 88 to resultados_simulacion/simulation_results_batch_88.csv
+2025-03-18 17:56:59,714 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,716 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,717 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,719 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,720 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,722 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,722 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,724 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,724 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,726 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,730 - INFO - Saved batch 89 to resultados_simulacion/simulation_results_batch_89.csv
+2025-03-18 17:56:59,786 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,788 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,789 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,790 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,791 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,793 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,793 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,795 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,795 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,798 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,802 - INFO - Saved batch 90 to resultados_simulacion/simulation_results_batch_90.csv
+2025-03-18 17:56:59,859 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,861 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,862 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,863 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,864 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,866 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,866 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,867 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,868 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,870 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,874 - INFO - Saved batch 91 to resultados_simulacion/simulation_results_batch_91.csv
+2025-03-18 17:56:59,930 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,933 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,933 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,935 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,935 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,937 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,937 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,939 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,939 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:56:59,941 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:56:59,946 - INFO - Saved batch 92 to resultados_simulacion/simulation_results_batch_92.csv
+2025-03-18 17:57:00,004 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,006 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,007 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,009 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,009 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,011 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,011 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,013 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,013 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,015 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,020 - INFO - Saved batch 93 to resultados_simulacion/simulation_results_batch_93.csv
+2025-03-18 17:57:00,077 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,080 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,080 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,082 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,083 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,084 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,084 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,086 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,087 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,089 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,093 - INFO - Saved batch 94 to resultados_simulacion/simulation_results_batch_94.csv
+2025-03-18 17:57:00,152 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,155 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,155 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,157 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,158 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,160 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,160 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,161 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,162 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,163 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,168 - INFO - Saved batch 95 to resultados_simulacion/simulation_results_batch_95.csv
+2025-03-18 17:57:00,225 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,227 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,228 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,230 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,230 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,232 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,232 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,235 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,235 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,237 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,242 - INFO - Saved batch 96 to resultados_simulacion/simulation_results_batch_96.csv
+2025-03-18 17:57:00,308 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,310 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,311 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,313 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,314 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,315 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,315 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,317 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,318 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,319 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,323 - INFO - Saved batch 97 to resultados_simulacion/simulation_results_batch_97.csv
+2025-03-18 17:57:00,379 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,381 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,382 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,385 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,385 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,387 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,387 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,389 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,389 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,391 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,395 - INFO - Saved batch 98 to resultados_simulacion/simulation_results_batch_98.csv
+2025-03-18 17:57:00,450 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,452 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,454 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,456 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,457 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,459 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,459 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,461 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,461 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,463 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,467 - INFO - Saved batch 99 to resultados_simulacion/simulation_results_batch_99.csv
+2025-03-18 17:57:00,523 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,525 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,526 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,528 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,529 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,531 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,532 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,533 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,533 - INFO - Starting simulation for scenario: pessimistic
+2025-03-18 17:57:00,536 - INFO - Successfully completed simulation for scenario: pessimistic
+2025-03-18 17:57:00,540 - INFO - Saved batch 100 to resultados_simulacion/simulation_results_batch_100.csv
+2025-03-18 17:57:00,848 - INFO - Successfully combined all results into resultados_simulacion/simulation_results.csv
+2025-03-18 17:57:00,894 - INFO - Simulation completed successfully
